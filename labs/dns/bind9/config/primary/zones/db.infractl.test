@@ -1,0 +1,14 @@
+$TTL 60
+@ IN SOA ns1.infractl.test. hostmaster.infractl.test. (
+  2026090601
+  60
+  30
+  300
+  60
+)
+@ IN NS ns1.infractl.test.
+@ IN NS ns2.infractl.test.
+ns1 IN A 172.28.0.10
+ns2 IN A 172.28.0.11
+app IN A 10.10.10.42
+api IN A 10.10.10.43

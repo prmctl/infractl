@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="labs" viewBox="0 0 24 24"><path d="M9 3h6M10 3v5l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3M8 14h8" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="template" viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6zM15 3v4h4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="runbook" viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="note" viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h6M8 16h4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="tools" viewBox="0 0 24 24"><path d="M14 6a4 4 0 0 0-5 5L3 17l4 4 6-6a4 4 0 0 0 5-5l-3 3-2-2z" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="dns" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 12h16M12 4a13 13 0 0 1 0 16M12 4a13 13 0 0 0 0 16" fill="none" stroke="currentColor" stroke-width="1.4"/></symbol>
+  <symbol id="server" viewBox="0 0 24 24"><path d="M5 5h14v5H5zM5 14h14v5H5zM8 7.5h.01M8 16.5h.01" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="6" ry="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M6 5.5v6c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-6M6 11.5v6c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-6" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="k8s" viewBox="0 0 24 24"><path d="M12 3l7 4v10l-7 4-7-4V7zM12 8v8M8.5 10l7 4M15.5 10l-7 4" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="net" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M8 7l3 9M16 7l-3 9M8 6h8" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="storage" viewBox="0 0 24 24"><path d="M5 5h14v6H5zM5 13h14v6H5zM8 8h.01M8 16h.01" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="observe" viewBox="0 0 24 24"><path d="M4 18V9M9 18V5M14 18v-7M19 18V3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="terminal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 9l3 3-3 3M12 15h5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="security" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-2.9 8.1-7 10-4.1-1.9-7-5.5-7-10V6zM9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+</svg>
