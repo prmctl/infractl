@@ -32,6 +32,17 @@ Open:
 http://localhost:8000
 ```
 
+## Dual URL support
+
+The static site is base-path aware and supports both:
+
+```text
+https://prmctl.github.io/infractl/
+https://infractl.prmctl.me/
+```
+
+On `prmctl.github.io`, assets resolve under `/infractl/`. On the custom domain and local preview, assets resolve from `/`.
+
 ## GitHub Pages + custom domain
 
 Target:
