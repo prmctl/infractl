@@ -3,7 +3,7 @@ name: Deploy infractl
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - "docs/**"
       - "templates/**"
