@@ -1,7 +1,10 @@
-.PHONY: serve check
+.PHONY: build serve check
 
-serve:
+build:
+	python3 build.py
+
+serve: build
 	python3 serve.py
 
-check:
+check: build
 	python3 check.py

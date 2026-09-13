@@ -1,0 +1,54 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Installation · infractl</title><link rel="icon" href="../../../assets/logo.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="../../../assets/style.css"></head><body>
+<header class="top">
+<a class="brand" href="../../../"><img src="../../../assets/logo.svg"><div>infractl<small>by prmctl</small></div></a>
+<nav class="nav">
+<a href="../../../labs/"><svg class="icon-svg blue"><use href="../../../assets/icons.svg#labs"></use></svg><span>Labs<em>Break & Learn</em></span></a>
+<a href="../../../templates/"><svg class="icon-svg green"><use href="../../../assets/icons.svg#template"></use></svg><span>Templates<em>Production Ready</em></span></a>
+<a href="../../../runbooks/"><svg class="icon-svg purple"><use href="../../../assets/icons.svg#runbook"></use></svg><span>Runbooks<em>Incident Guides</em></span></a>
+<a href="../../../field-notes/"><svg class="icon-svg purple"><use href="../../../assets/icons.svg#note"></use></svg><span>Field Notes<em>Real World</em></span></a>
+<a href="../../../tools/"><svg class="icon-svg cyan"><use href="../../../assets/icons.svg#tools"></use></svg><span>Tools<em>Utilities</em></span></a>
+</nav>
+<div class="toptools"><button id="menu-toggle" class="iconbtn mobile">☰</button><div class="search">⌕ <input placeholder="Search documentation..."></div><button id="theme-toggle" class="iconbtn" aria-label="Toggle theme">◐</button><a class="iconbtn" href="https://github.com/prmctl/infractl" aria-label="GitHub"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 .7a11.3 11.3 0 0 0-3.6 22c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.4 3.6 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.4-5.5-6a4.7 4.7 0 0 1 1.2-3.3 4.4 4.4 0 0 1 .1-3.2s1-.3 3.5 1.3a12 12 0 0 1 6.3 0c2.4-1.6 3.5-1.3 3.5-1.3a4.4 4.4 0 0 1 .1 3.2 4.7 4.7 0 0 1 1.2 3.3c0 4.7-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.3 11.3 0 0 0 12 .7z"/></svg></a></div>
+</header>
+<div class="layout"><aside class="sidebar"></aside><main class="main"><article class="doc"><div class="crumb">Labs  ›  Web Servers  ›  Nginx</div><h1>Installation</h1>
+<h2>Package Manager</h2>
+<pre><code class="language-sh">sudo apt update
+sudo apt install nginx
+</code></pre>
+<h1>Managment</h1>
+<pre><code class="language-bash">sudo systemctl status nginx
+</code></pre>
+<h2>Process</h2>
+<pre><code class="language-bash">ps aux | grep nginx
+</code></pre>
+<pre><code class="language-text">root      2283 ... nginx: master process ...
+www-data  2285 ... nginx: worker process
+www-data  2286 ... nginx: worker process
+</code></pre>
+<pre><code class="language-text">             master
+          PID: 2283
+          user: root
+              │
+        ┌─────┴─────┐
+        ▼           ▼
+     worker       worker
+    PID 2285      PID 2286
+    www-data      www-data
+</code></pre>
+<p>Master Process با root اجرا شده. وظیفه اصلی‌اش مدیریت Nginx است: config را می‌خواند، workerها را ایجاد و مدیریت می‌کند و reload/shutdown را کنترل می‌کند.</p>
+<p>اما معمولاً خود Master درخواست HTTP کاربران را پردازش نمی‌کند.</p>
+<p>Worker Processها درخواست‌ها و connectionهای واقعی را پردازش می‌کنند. نکته امنیتی خوبی هم همین‌جا می‌بینی: workerهای تو root نیستند؛ با کاربر محدودتر www-data اجرا شده‌اند.</p>
+<h2>Port &amp; network</h2>
+<pre><code class="language-bash">sudo ss -lntp | grep nginx
+</code></pre>
+<pre><code class="language-text">LISTEN 0      511          0.0.0.0:80        0.0.0.0:*    users:((&quot;nginx&quot;,pid=2286,fd=5),(&quot;nginx&quot;,pid=2285,fd=5),(&quot;nginx&quot;,pid=2283,fd=5))
+LISTEN 0      511             [::]:80           [::]:*    users:((&quot;nginx&quot;,pid=2286,fd=6),(&quot;nginx&quot;,pid=2285,fd=6),(&quot;nginx&quot;,pid=2283,fd=6))
+</code></pre>
+<p>511 شماره پورت یا تعداد connectionهای فعلی نیست. این مقدار listen backlog است؛ یعنی kernel چه تعداد connection در صف listen می‌تواند نگه دارد.</p>
+<pre><code class="language-sh">nginx -t
+</code></pre>
+<pre><code class="language-sh">systemctl reload nginx
+</code></pre>
+</article></main>
+<aside class="rightbar"><div class="box"><div class="rbrand"><img src="../../../assets/logo.svg"><div><h3>infractl</h3><p style="margin:0">by prmctl</p></div></div><p>Open source knowledge base for infrastructure engineers.</p><ul class="list"><li>● Hands-on labs</li><li>● Production templates</li><li>● Incident runbooks</li><li>● Real-world experience</li></ul><a class="star" href="https://github.com/prmctl/infractl">★ Star on GitHub</a></div></aside></div>
+<script src="../../../assets/navigation.js"></script><script src="../../../assets/app.js"></script></body></html>
