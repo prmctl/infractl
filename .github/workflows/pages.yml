@@ -3,7 +3,15 @@ name: Deploy infractl
 on:
   push:
     branches:
-      - master
+      - main
+    paths:
+      - "docs/**"
+      - "templates/**"
+      - "assets/**"
+      - "build.py"
+      - "requirements.txt"
+      - ".github/workflows/deploy.yml"
+
   workflow_dispatch:
 
 permissions:
@@ -12,7 +20,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: github-pages
+  group: pages
   cancel-in-progress: true
 
 jobs:
@@ -20,31 +28,42 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Prepare Pages artifact
-        run: |
-          mkdir -p dist
-          cp -a site/. dist/
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-      - name: Configure GitHub Pages
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build site
+        run: python build.py
+
+      - name: Verify build
+        run: |
+          test -f site/index.html
+          test -d site/labs
+
+      - name: Setup GitHub Pages
         uses: actions/configure-pages@v5
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: site
 
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
+    runs-on: ubuntu-latest
+    needs: build
+
     steps:
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
