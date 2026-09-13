@@ -10,7 +10,7 @@ on:
       - "assets/**"
       - "build.py"
       - "requirements.txt"
-      - ".github/workflows/deploy.yml"
+      - ".github/workflows/**"
 
   workflow_dispatch:
 
