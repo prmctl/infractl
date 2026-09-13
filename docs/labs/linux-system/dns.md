@@ -5,3 +5,6 @@ test
 test
 ```
 
+```sh
+apt install nginx
+```
