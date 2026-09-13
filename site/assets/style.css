@@ -1065,3 +1065,55 @@ button,input{font:inherit}
     right:-14%
   }
 }
+
+
+/* Code block copy button */
+
+.doc pre{
+  position:relative;
+  padding-top:42px;
+}
+
+.code-copy{
+  position:absolute;
+  top:8px;
+  right:8px;
+
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  padding:5px 9px;
+
+  border:1px solid var(--line);
+  border-radius:7px;
+
+  background:var(--panel);
+  color:var(--muted);
+
+  font:700 9px Inter,system-ui,sans-serif;
+
+  cursor:pointer;
+
+  transition:
+    background .15s ease,
+    color .15s ease,
+    border-color .15s ease;
+}
+
+.code-copy:hover{
+  background:var(--panel2);
+  color:var(--text);
+  border-color:#31506a;
+}
+
+.code-copy.copied{
+  color:var(--green);
+  border-color:var(--green);
+}
+
+.code-copy svg{
+  width:13px;
+  height:13px;
+  pointer-events:none;
+}
