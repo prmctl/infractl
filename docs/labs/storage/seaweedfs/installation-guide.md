@@ -534,9 +534,7 @@ Group=seaweedfs
 ExecStart=/usr/local/bin/weed s3 \
     -filer=127.0.0.1:8888 \
     -ip=127.0.0.1 \
-    -ip.bind=127.0.0.1 \
-    -port=8333 \
-    -config=/etc/seaweedfs/s3.json
+    -ip.bind=127.0.0.1 \-port=8333 -config=/etc/seaweedfs/s3.json
 
 Restart=on-failure
 RestartSec=5
@@ -583,10 +581,7 @@ Download and extract AWS CLI v2 for x86-64:
 
 ``` sh
 cd /tmp
-
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" \
-  -o awscliv2.zip
-
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip
 unzip awscliv2.zip
 ./aws/install
 ```
@@ -610,17 +605,13 @@ export AWS_DEFAULT_REGION="us-east-1"
 Create a bucket:
 
 ``` sh
-aws \
-  --endpoint-url http://127.0.0.1:8333 \
-  s3 mb s3://test-bucket
+aws --endpoint-url http://127.0.0.1:8333 s3 mb s3://test-bucket
 ```
 
 List buckets:
 
 ``` sh
-aws \
-  --endpoint-url http://127.0.0.1:8333 \
-  s3 ls
+aws --endpoint-url http://127.0.0.1:8333 s3 ls
 ```
 
 Create a test object:
@@ -632,25 +623,19 @@ echo "Hello through the S3 API" > /tmp/s3-test.txt
 Upload it:
 
 ``` sh
-aws \
-  --endpoint-url http://127.0.0.1:8333 \
-  s3 cp /tmp/s3-test.txt s3://test-bucket/
+aws --endpoint-url http://127.0.0.1:8333 s3 cp /tmp/s3-test.txt s3://test-bucket/
 ```
 
 List the bucket:
 
 ``` sh
-aws \
-  --endpoint-url http://127.0.0.1:8333 \
-  s3 ls s3://test-bucket/
+aws --endpoint-url http://127.0.0.1:8333 s3 ls s3://test-bucket/
 ```
 
 Download the object to standard output:
 
 ``` sh
-aws \
-  --endpoint-url http://127.0.0.1:8333 \
-  s3 cp s3://test-bucket/s3-test.txt -
+aws --endpoint-url http://127.0.0.1:8333 s3 cp s3://test-bucket/s3-test.txt -
 ```
 
 Expected output:
@@ -910,13 +895,3 @@ The next logical production steps are **TLS and reverse proxying,
 monitoring with Prometheus/Grafana, multi-node replication, backup
 strategy, and failure testing**.
 
-------------------------------------------------------------------------
-
-## Useful References
-
--   SeaweedFS project: `https://github.com/seaweedfs/seaweedfs`
--   AWS CLI:
-    `https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html`
-
-> Always review the documentation for the exact SeaweedFS release you
-> deploy. Flags and security capabilities can evolve between versions.
