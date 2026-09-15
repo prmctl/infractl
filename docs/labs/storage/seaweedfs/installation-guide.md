@@ -120,10 +120,7 @@ Do not run the storage services as root. Create a dedicated system
 account:
 
 ``` sh
-useradd --system \
-  --home-dir /var/lib/seaweedfs \
-  --shell /usr/sbin/nologin \
-  seaweedfs
+useradd --system --home-dir /var/lib/seaweedfs --shell /usr/sbin/nologin seaweedfs
 ```
 
 Create the configuration and data directories:
@@ -170,12 +167,7 @@ Type=simple
 User=seaweedfs
 Group=seaweedfs
 
-ExecStart=/usr/local/bin/weed master \
-    -mdir=/var/lib/seaweedfs/master \
-    -ip=127.0.0.1 \
-    -ip.bind=127.0.0.1 \
-    -port=9333 \
-    -peers=none
+ExecStart=/usr/local/bin/weed master -mdir=/var/lib/seaweedfs/master -ip=127.0.0.1 -ip.bind=127.0.0.1 -port=9333 -peers=none
 
 Restart=on-failure
 RestartSec=5
@@ -238,13 +230,7 @@ Type=simple
 User=seaweedfs
 Group=seaweedfs
 
-ExecStart=/usr/local/bin/weed volume \
-    -dir=/var/lib/seaweedfs/volume \
-    -master=127.0.0.1:9333 \
-    -ip=127.0.0.1 \
-    -ip.bind=127.0.0.1 \
-    -port=8080 \
-    -max=5
+ExecStart=/usr/local/bin/weed volume -dir=/var/lib/seaweedfs/volume -master=127.0.0.1:9333 -ip=127.0.0.1 -ip.bind=127.0.0.1 -port=8080 -max=5
 
 Restart=on-failure
 RestartSec=5
@@ -305,8 +291,7 @@ echo "Hello SeaweedFS" > /tmp/seaweed-test.txt
 Upload it to the returned Volume Server using the returned `fid`:
 
 ``` sh
-curl -F file=@/tmp/seaweed-test.txt \
-  http://127.0.0.1:8080/3,03761b871b
+curl -F file=@/tmp/seaweed-test.txt http://127.0.0.1:8080/3,03761b871b
 ```
 
 Read it back:
@@ -367,12 +352,7 @@ User=seaweedfs
 Group=seaweedfs
 WorkingDirectory=/var/lib/seaweedfs/filer
 
-ExecStart=/usr/local/bin/weed filer \
-    -master=127.0.0.1:9333 \
-    -ip=127.0.0.1 \
-    -ip.bind=127.0.0.1 \
-    -port=8888 \
-    -defaultStoreDir=/var/lib/seaweedfs/filer
+ExecStart=/usr/local/bin/weed filer -master=127.0.0.1:9333 -ip=127.0.0.1 -ip.bind=127.0.0.1 -port=8888 -defaultStoreDir=/var/lib/seaweedfs/filer
 
 Restart=on-failure
 RestartSec=5
@@ -425,8 +405,7 @@ echo "Hello from SeaweedFS Filer" > /tmp/filer-test.txt
 Upload it through the Filer:
 
 ``` sh
-curl -F file=@/tmp/filer-test.txt \
-  http://127.0.0.1:8888/test/hello.txt
+curl -F file=@/tmp/filer-test.txt http://127.0.0.1:8888/test/hello.txt
 ```
 
 Read it back using its normal path:
