@@ -1964,3 +1964,52 @@ input{
     line-height:1.75;
   }
 }
+
+.doc pre{
+  position:relative;
+
+  width:100%;
+
+  margin:20px 0 28px;
+
+  /* Top / Right / Bottom / Left */
+  padding:20px 110px 20px 24px;
+
+  overflow:auto;
+
+  background:#02070c;
+
+  border:1px solid #1d3b4e;
+  border-radius:11px;
+
+  color:#d9e9f3;
+
+  font-family:
+    "JetBrains Mono",
+    "Cascadia Code",
+    "SFMono-Regular",
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    monospace;
+
+  font-size:15.5px;
+  font-weight:500;
+  line-height:1.8;
+
+  letter-spacing:-0.01em;
+
+  tab-size:4;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.025),
+    0 6px 22px rgba(0,0,0,.15);
+}
+
+.doc pre{
+  padding:18px 100px 18px 16px;
+
+  font-size:13.5px;
+  line-height:1.75;
+}

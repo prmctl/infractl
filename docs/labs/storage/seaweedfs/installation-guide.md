@@ -1,115 +1,34 @@
 ---
-author: Your Name
-date: 2026-09-15
-description: A step-by-step guide to deploying SeaweedFS Master, Volume
-  Server, Filer, and the S3-compatible gateway natively on Ubuntu
-  without Docker.
-tags:
-- SeaweedFS
-- Object Storage
-- S3
-- Ubuntu
-- Linux
-- systemd
-- Infrastructure
-title: How to Install and Configure SeaweedFS on Ubuntu with systemd
----
-
-# How to Install and Configure SeaweedFS on Ubuntu with systemd
-
-SeaweedFS is a distributed storage system designed to store and serve
-large numbers of files efficiently. It can expose several storage
-interfaces, including a native file-oriented API through the **Filer**
-and an **S3-compatible API** for applications and tools that already
-speak the Amazon S3 protocol.
-
-This guide walks through a native, systemd-based SeaweedFS deployment on
-Ubuntu. No Docker or Kubernetes is required.
-
-By the end of the article, the server will run:
-
--   **Master Server** --- manages topology and volume placement.
--   **Volume Server** --- stores the actual file data.
--   **Filer** --- provides directories, filenames, and file metadata.
--   **S3 Gateway** --- exposes an S3-compatible API.
--   **AWS CLI** --- provides a convenient way to test the S3 endpoint.
-
-> This tutorial builds a **single-node lab deployment**. It is excellent
-> for learning, development, and small internal environments, but it is
-> not highly available. Production deployments should use multiple
-> nodes, replication, TLS, proper firewall rules, monitoring, backups,
-> and an appropriate metadata backend.
-
 ## Architecture
 
 The final request path looks like this:
 
-``` text
-Application / AWS CLI
-        |
-        | S3 API :8333
-        v
-+-------------------+
-|    S3 Gateway     |
-+---------+---------+
-          |
-          v
-+-------------------+
-|       Filer       | :8888
-| paths + metadata  |
-+---------+---------+
-          |
-          +--------------------+
-          |                    |
-          v                    v
-+-------------------+   +-------------------+
-|      Master       |   |   Volume Server   |
-|      :9333        |   |      :8080        |
-+-------------------+   +-------------------+
-                               |
-                               v
-                         .dat / .idx files
-```
 
 The Master does not store the object payload itself. It manages topology
 and allocation. The Volume Server stores file data, while the Filer adds
 a conventional namespace such as `/backups/database.sql` on top of
 SeaweedFS file IDs.
 
-## Prerequisites
-
-This guide assumes:
-
--   Ubuntu 24.04 LTS or a comparable modern Ubuntu release
--   An x86-64 server
--   Root access or equivalent `sudo` privileges
--   Internet access for downloading SeaweedFS and AWS CLI
--   A single-node deployment for learning purposes
-
-Check the system first:
-
-``` sh
-uname -a
-lsb_release -a
-df -h
-ip addr
-```
-
 ## 1. Install SeaweedFS
 
 Download and install the SeaweedFS `weed` binary using the project's
 installation method, or place the downloaded binary in `/usr/local/bin`.
 
-After installation, verify it:
+```sh
+apt update
+apt install -y curl
+curl -fsSL https://raw.githubusercontent.com/seaweedfs/seaweedfs/master/install.sh | bash
+weed version
+which weed
+```
 
+After installation, verify it:
 ``` sh
 /usr/local/bin/weed version
 ```
 
 You should see the installed SeaweedFS version and architecture.
-
 You can also confirm the binary location:
-
 ``` sh
 command -v weed
 ```
