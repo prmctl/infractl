@@ -531,10 +531,7 @@ Type=simple
 User=seaweedfs
 Group=seaweedfs
 
-ExecStart=/usr/local/bin/weed s3 \
-    -filer=127.0.0.1:8888 \
-    -ip=127.0.0.1 \
-    -ip.bind=127.0.0.1 \-port=8333 -config=/etc/seaweedfs/s3.json
+ExecStart=/usr/local/bin/weed s3 -filer=127.0.0.1:8888 -ip=127.0.0.1 -ip.bind=127.0.0.1 -port=8333 -config=/etc/seaweedfs/s3.json
 
 Restart=on-failure
 RestartSec=5
