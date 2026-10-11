@@ -1,13 +1,11 @@
-# Installation
+# Disk And File System
 
+Prepare
 ```sh
 sudo apt update
 sudo apt install -y fio stress-ng lvm2 mdadm dmsetup e2fsprogs sysstat smartmontools util-linux
 ```
 
-# Disk And File System
-
-## Prepare
 ```sh
 mkdir -p /root/chaosd-install
 cd /root/chaosd-install
