@@ -1,29 +1,17 @@
 # infractl
 
-A straightforward infrastructure knowledge base, published on GitHub Pages using [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/).
+Personal infrastructure documentation. Published at https://prmctl.github.io/infractl/.
 
-## Sections
-
-- Templates
-- Laboratories (including field notes and runbooks)
-- Common Commands
-
-## Local development
+## Local preview
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-mkdocs serve
+python -m pip install -r requirements.txt
+python -m mkdocs serve
 ```
 
-## Publish
+## Deployment
 
-1. Push this repository to GitHub (`main` or `master`).
-2. Go to **Settings → Pages → Build and deployment** and select **GitHub Actions**.
-3. Push a Markdown change; the workflow builds and deploys the site.
-4. The site is served at `https://USERNAME.github.io/REPO/` unless a custom domain is configured.
+Push the contents of this directory to the repository root on `master` or `main`.
+Set **Settings → Pages → Build and deployment → Source** to **GitHub Actions**.
 
-The docs are original Markdown files. No AI-generated filler or fabricated lab results have been added.
-
-GitBook's modern hosted service cannot be directly deployed to GitHub Pages. This uses a maintained static documentation generator instead.
+The workflow builds the `docs/` directory with MkDocs and deploys `site/`.
