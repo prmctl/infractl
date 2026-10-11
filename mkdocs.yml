@@ -10,33 +10,30 @@ theme:
   name: material
   language: en
   features:
-    - navigation.indexes
-    - navigation.path
-    - search.highlight
-    - content.code.copy
+  - navigation.indexes
+  - search.highlight
+  - content.code.copy
   palette:
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: blue grey
-      accent: cyan
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: blue grey
-      accent: cyan
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
+  - scheme: slate
+    primary: blue grey
+    accent: cyan
+    toggle:
+      icon: material/weather-sunny
+      name: Switch to light mode
+  - scheme: default
+    primary: blue grey
+    accent: cyan
+    toggle:
+      icon: material/weather-night
+      name: Switch to dark mode
   font: false
 extra_css:
-  - stylesheets/compact.css
+- stylesheets/compact.css
 markdown_extensions:
-  - admonition
-  - pymdownx.superfences
-  - pymdownx.highlight:
-      anchor_linenums: true
+- admonition
+- pymdownx.superfences
+- pymdownx.highlight:
+    anchor_linenums: true
 plugins:
-  - search
-# No nav: MkDocs discovers new nested folders and Markdown pages automatically.
+- search
+- awesome-pages
