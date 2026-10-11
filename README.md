@@ -17,3 +17,5 @@ python -m mkdocs serve -f mkdocs.generated.yml
 Push all files, including `.github/workflows/pages.yml`, to `master`. Set **Settings → Pages → Source: GitHub Actions**.
 
 The custom domain is `infractl.prmctl.me`. The theme supports dark and light modes.
+
+Deployment note: the workflow no longer assumes a particular HTML output path for each section; MkDocs is the source of truth.
