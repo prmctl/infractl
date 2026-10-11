@@ -15,3 +15,18 @@
   .md-content { max-width: none; }
 }
 @media screen and (max-width: 76.24em) { .md-grid { margin-left: auto; margin-right: auto; } }
+
+/* Same restrained blue-grey / cyan palette in both modes */
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #526e7b;
+  --md-primary-fg-color--light: #688594;
+  --md-primary-fg-color--dark: #354d59;
+  --md-accent-fg-color: #32c5d2;
+}
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #526e7b;
+  --md-primary-fg-color--light: #688594;
+  --md-primary-fg-color--dark: #354d59;
+  --md-accent-fg-color: #087e93;
+  --md-default-bg-color: #ffffff;
+}
