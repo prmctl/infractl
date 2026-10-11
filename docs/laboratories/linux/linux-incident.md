@@ -1,21 +1,13 @@
-
 # Installation
 
 ```sh
-
 sudo apt update
-
 sudo apt install -y fio stress-ng lvm2 mdadm dmsetup e2fsprogs sysstat smartmontools util-linux
-
 ```
 
+# Disk And File System
 
-
-# Incidents
-
-## Disk And File System
-
-### Prepare
+## Prepare
 ```sh
 mkdir -p /root/chaosd-install
 cd /root/chaosd-install
@@ -34,20 +26,20 @@ sudo mount -o loop /var/tmp/fs-lab.img /mnt/fs-lab
 mountpoint /mnt/fs-lab
 ```
 
-### Filesystem Space Exhaustion (Disk Full)
+## Filesystem Space Exhaustion (Disk Full)
 A full filesystem causes writes requiring additional space to fail with ENOSPC (No space left on device). This can disrupt databases, logging, uploads, and service startup. Existing data generally remains readable; the filesystem does not automatically become read-only.
 Empty files may still be created if inodes and directory-entry space are available. Check capacity with df -h, inodes with df -i, and mount status (rw/ro) with findmnt.
 Deletion usually works. Moving files within the same filesystem does not free space; moving them to another filesystem does. Deleted files held open by processes retain their space until closed; inspect them with lsof +L1.
 Check service errors using journalctl -u <service> and configured application logs, often under /var/log/. Logs on the full filesystem may be missing.
 Recover by safely removing or relocating unnecessary data, verifying free space, and checking service health. Failed services may need restarting; failed writes are not automatically recovered.
 
-#### incident generator
+### incident generator
 ```sh
 mountpoint /mnt/fs-lab && chaosd attack disk fill --path /mnt/fs-lab/fill-rest.bin --fallocate=false --size 600M
 ```
 
 ---
-### Inode Exhaustion
+## Inode Exhaustion
 When a filesystem runs out of free inodes, creating new files, directories, or symlinks fails with ENOSPC (No space left on device), even when disk space remains available. Existing files generally remain readable and writable if sufficient data space is available.
 This can disrupt uploads, temporary files, sessions, log rotation, database operations, and service startup. Check inode usage with df -i and compare it with disk usage using df -h.
 Check journalctl -u <service> and configured application logs for failed file creation. The error message alone does not distinguish inode exhaustion from disk-space exhaustion.
@@ -55,7 +47,7 @@ Stop excessive file creation and safely delete unnecessary files. Deleted files 
 For directories containing millions of files, use find or unsorted ls -1U for inspection and controlled cleanup. Prevent recurrence through retention policies and inode monitoring; splitting files across directories improves manageability but does not reduce total inode usage.
 
 
-#### incident generator
+### incident generator
 ```sh
 mkdir -p /mnt/inode-lab
 test ! -e /var/tmp/inode-lab-3m.img &&
@@ -88,7 +80,7 @@ else:
 PY
 ```
 ---
-### Filesystem Read-only
+## Filesystem Read-only
 A filesystem may become read-only because of a filesystem error or a failure in the storage path. For example, the filesystem driver may detect inconsistent metadata or a journal error and stop further writes. With ext4, the `errors=remount-ro` mount option tells the filesystem to remount as read-only after certain errors.
 
 A filesystem error can follow an unexpected shutdown, a kernel or filesystem bug, or an unsafe administrative operation. A storage failure can come from the disk or any part of the storage path, such as a controller, RAID, virtual disk, or network storage. A storage I/O error may trigger a filesystem error and cause a read-only remount.
@@ -97,7 +89,7 @@ A read-only mount can also be intentional. If the filesystem was deliberately mo
 
 Reading may remain possible, while writes, deletions, and renames fail with `Read-only file system`. Data already stored may still be readable, but recent or failed writes are not guaranteed to be preserved.
 
-#### Diagnose
+### Diagnose
 
 Check the mount state and options:
 
@@ -126,7 +118,7 @@ journalctl -k -b -1 | grep -Ei 'error|fail|I/O|ext4|xfs|btrfs|nvme|scsi|remount|
 
 Look for filesystem errors, journal aborts, I/O errors, device resets, and messages indicating a read-only remount. These messages can help distinguish a filesystem-level error from a failure in the storage path.
 
-#### Recovery
+### Recovery
 
 1. Identify and resolve the underlying filesystem, storage, or configuration problem. Do not treat a remount to read-write as a fix if the cause is still present.
 2. Preserve important data before attempting repairs. If the storage device or path is still failing, avoid in-place repairs until the storage is stable; consider recovering from a copy or image.
@@ -144,7 +136,7 @@ Look for filesystem errors, journal aborts, I/O errors, device resets, and messa
 A root filesystem may require a rescue or recovery environment to unmount and repair it. If read-only mode was intentional and there is no filesystem or storage error, correcting the configuration and remounting read-write may be sufficient.
 
 
-#### incident generator
+### incident generator
 ```sh
 df -h /var/tmp
 test ! -e /var/tmp/io-fault-lab.img &&
