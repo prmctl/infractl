@@ -6,128 +6,7 @@ window.INFRACTL_NAV = [
     "color": "cyan"
   },
   {
-    "group": "Labs · Break & Learn",
-    "items": [
-      {
-        "label": "Overview",
-        "href": "labs/",
-        "icon": "labs",
-        "color": "blue"
-      },
-      {
-        "label": "Databases",
-        "href": "labs/databases/",
-        "icon": "db",
-        "color": "blue"
-      },
-      {
-        "label": "DNS",
-        "href": "labs/dns/",
-        "icon": "dns",
-        "color": "blue",
-        "children": [
-          {
-            "label": "BIND9 Primary / Secondary",
-            "href": "labs/dns/bind9/",
-            "icon": "note",
-            "color": "blue"
-          },
-          {
-            "label": "CoreDNS",
-            "href": "labs/dns/coredns/",
-            "icon": "note",
-            "color": "blue"
-          },
-          {
-            "label": "Unbound",
-            "href": "labs/dns/unbound/",
-            "icon": "note",
-            "color": "blue"
-          }
-        ]
-      },
-      {
-        "label": "Kubernetes",
-        "href": "labs/kubernetes/",
-        "icon": "k8s",
-        "color": "blue"
-      },
-      {
-        "label": "Linux System",
-        "href": "labs/linux-system/",
-        "icon": "terminal",
-        "color": "blue",
-        "children": [
-          {
-            "label": "DNS",
-            "href": "labs/linux-system/dns/",
-            "icon": "dns",
-            "color": "blue"
-          },
-          {
-            "label": "File System",
-            "href": "labs/linux-system/file_system/",
-            "icon": "note",
-            "color": "blue"
-          },
-          {
-            "label": "Nework",
-            "href": "labs/linux-system/nework/",
-            "icon": "note",
-            "color": "blue"
-          }
-        ]
-      },
-      {
-        "label": "Networking",
-        "href": "labs/networking/",
-        "icon": "net",
-        "color": "blue"
-      },
-      {
-        "label": "Observability",
-        "href": "labs/observability/",
-        "icon": "observe",
-        "color": "blue"
-      },
-      {
-        "label": "Security",
-        "href": "labs/security/",
-        "icon": "security",
-        "color": "blue"
-      },
-      {
-        "label": "Storage",
-        "href": "labs/storage/",
-        "icon": "storage",
-        "color": "blue"
-      },
-      {
-        "label": "Web Servers",
-        "href": "labs/web-servers/",
-        "icon": "server",
-        "color": "blue",
-        "children": [
-          {
-            "label": "Nginx",
-            "href": "labs/web-servers/nginx/",
-            "icon": "tools",
-            "color": "blue",
-            "children": [
-              {
-                "label": "Architecture",
-                "href": "labs/web-servers/nginx/architecture/",
-                "icon": "note",
-                "color": "blue"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "group": "Templates · Copy & Use",
+    "group": "Templates · Reusable Configs",
     "items": [
       {
         "label": "Overview",
@@ -170,56 +49,249 @@ window.INFRACTL_NAV = [
     ]
   },
   {
-    "group": "Runbooks · Incident Guides",
+    "group": "Laboratories · Hands-on",
     "items": [
       {
         "label": "Overview",
-        "href": "runbooks/",
-        "icon": "runbook",
-        "color": "purple"
+        "href": "lab/",
+        "icon": "labs",
+        "color": "blue"
       },
       {
         "label": "Databases",
-        "href": "runbooks/databases/",
+        "href": "lab/databases/",
         "icon": "db",
-        "color": "purple"
+        "color": "blue"
       },
       {
         "label": "DNS",
-        "href": "runbooks/dns/",
+        "href": "lab/dns/",
         "icon": "dns",
-        "color": "purple",
+        "color": "blue",
         "children": [
           {
             "label": "DNS Resolution Failure",
-            "href": "runbooks/dns/resolution-failure/",
+            "href": "lab/dns/resolution-failure/",
             "icon": "note",
-            "color": "purple"
+            "color": "blue"
           }
         ]
       },
       {
         "label": "Kubernetes",
-        "href": "runbooks/kubernetes/",
+        "href": "lab/kubernetes/",
         "icon": "k8s",
-        "color": "purple"
+        "color": "blue"
       },
       {
         "label": "System",
-        "href": "runbooks/system/",
+        "href": "lab/system/",
         "icon": "terminal",
-        "color": "purple"
+        "color": "blue"
       },
       {
         "label": "Web Servers",
-        "href": "runbooks/web-servers/",
+        "href": "lab/web-servers/",
         "icon": "server",
-        "color": "purple"
+        "color": "blue"
       }
     ]
   },
   {
-    "group": "Field Notes · Real World",
+    "group": "Common Commands · Quick Reference",
+    "items": [
+      {
+        "label": "Overview",
+        "href": "commands/",
+        "icon": "tools",
+        "color": "cyan"
+      },
+      {
+        "label": "Databases",
+        "href": "commands/databases/",
+        "icon": "db",
+        "color": "cyan"
+      },
+      {
+        "label": "DNS",
+        "href": "commands/dns/",
+        "icon": "dns",
+        "color": "cyan",
+        "children": [
+          {
+            "label": "BIND9 Primary / Secondary",
+            "href": "commands/dns/bind9/",
+            "icon": "note",
+            "color": "cyan"
+          },
+          {
+            "label": "CoreDNS",
+            "href": "commands/dns/coredns/",
+            "icon": "note",
+            "color": "cyan"
+          },
+          {
+            "label": "Unbound",
+            "href": "commands/dns/unbound/",
+            "icon": "note",
+            "color": "cyan"
+          }
+        ]
+      },
+      {
+        "label": "Kubernetes",
+        "href": "commands/kubernetes/",
+        "icon": "k8s",
+        "color": "cyan"
+      },
+      {
+        "label": "Linux",
+        "href": "commands/linux/",
+        "icon": "tools",
+        "color": "cyan",
+        "children": [
+          {
+            "label": "Certbot — Important Commands Cheat Sheet",
+            "href": "commands/linux/certbot/",
+            "icon": "note",
+            "color": "cyan"
+          },
+          {
+            "label": "DNS",
+            "href": "commands/linux/dns/",
+            "icon": "dns",
+            "color": "cyan"
+          },
+          {
+            "label": "File System",
+            "href": "commands/linux/file_system/",
+            "icon": "note",
+            "color": "cyan"
+          },
+          {
+            "label": "Linux Kernel",
+            "href": "commands/linux/kernel/",
+            "icon": "note",
+            "color": "cyan"
+          },
+          {
+            "label": "Nework",
+            "href": "commands/linux/nework/",
+            "icon": "note",
+            "color": "cyan"
+          },
+          {
+            "label": "Open Vpn",
+            "href": "commands/linux/open-vpn/",
+            "icon": "note",
+            "color": "cyan"
+          },
+          {
+            "label": "SSH",
+            "href": "commands/linux/ssh/",
+            "icon": "note",
+            "color": "cyan"
+          },
+          {
+            "label": "OpenSSL",
+            "href": "commands/linux/ssl/",
+            "icon": "note",
+            "color": "cyan"
+          },
+          {
+            "label": "Systemd",
+            "href": "commands/linux/systemd/",
+            "icon": "note",
+            "color": "cyan"
+          }
+        ]
+      },
+      {
+        "label": "Networking",
+        "href": "commands/networking/",
+        "icon": "net",
+        "color": "cyan"
+      },
+      {
+        "label": "Observability",
+        "href": "commands/observability/",
+        "icon": "observe",
+        "color": "cyan",
+        "children": [
+          {
+            "label": "Runbook: Prometheus Node Exporter Installation",
+            "href": "commands/observability/prometheus-install/",
+            "icon": "note",
+            "color": "cyan"
+          }
+        ]
+      },
+      {
+        "label": "Security",
+        "href": "commands/security/",
+        "icon": "security",
+        "color": "cyan"
+      },
+      {
+        "label": "Storage",
+        "href": "commands/storage/",
+        "icon": "storage",
+        "color": "cyan",
+        "children": [
+          {
+            "label": "Seaweedfs",
+            "href": "commands/storage/seaweedfs/",
+            "icon": "tools",
+            "color": "cyan",
+            "children": [
+              {
+                "label": "Architecture",
+                "href": "commands/storage/seaweedfs/architecture/",
+                "icon": "note",
+                "color": "cyan"
+              },
+              {
+                "label": "Installation Guide",
+                "href": "commands/storage/seaweedfs/installation-guide/",
+                "icon": "note",
+                "color": "cyan"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "label": "Web Servers",
+        "href": "commands/web-servers/",
+        "icon": "server",
+        "color": "cyan",
+        "children": [
+          {
+            "label": "Nginx",
+            "href": "commands/web-servers/nginx/",
+            "icon": "tools",
+            "color": "cyan",
+            "children": [
+              {
+                "label": "Architecture",
+                "href": "commands/web-servers/nginx/architecture/",
+                "icon": "note",
+                "color": "cyan"
+              },
+              {
+                "label": "Architecture",
+                "href": "commands/web-servers/nginx/nginx/",
+                "icon": "note",
+                "color": "cyan"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "group": "Field Notes · Experience",
     "items": [
       {
         "label": "Latest Posts",

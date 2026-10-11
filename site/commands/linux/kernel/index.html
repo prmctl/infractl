@@ -1,0 +1,376 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Linux Kernel · infractl</title><link rel="icon" href="../../../assets/logo.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="../../../assets/style.css"></head><body>
+<header class="top">
+<a class="brand" href="../../../"><img src="../../../assets/logo.svg"><div>infractl<small>by prmctl</small></div></a>
+<nav class="nav">
+<a href="../../../lab/"><svg class="icon-svg blue"><use href="../../../assets/icons.svg#labs"></use></svg><span>Laboratories<em>Hands-on</em></span></a>
+<a href="../../../templates/"><svg class="icon-svg green"><use href="../../../assets/icons.svg#template"></use></svg><span>Templates<em>Production Ready</em></span></a>
+<a href="../../../commands/"><svg class="icon-svg purple"><use href="../../../assets/icons.svg#runbook"></use></svg><span>Commands<em>Quick Reference</em></span></a>
+<a href="../../../field-notes/"><svg class="icon-svg purple"><use href="../../../assets/icons.svg#note"></use></svg><span>Field Notes<em>Real World</em></span></a>
+<a href="../../../tools/"><svg class="icon-svg cyan"><use href="../../../assets/icons.svg#tools"></use></svg><span>Tools<em>Utilities</em></span></a>
+</nav>
+<div class="toptools"><button id="menu-toggle" class="iconbtn mobile">☰</button><div class="search">⌕ <input placeholder="Search documentation..."></div><button id="theme-toggle" class="iconbtn" aria-label="Toggle theme">◐</button><a class="iconbtn" href="https://github.com/prmctl/infractl" aria-label="GitHub"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 .7a11.3 11.3 0 0 0-3.6 22c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.4 3.6 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.4-5.5-6a4.7 4.7 0 0 1 1.2-3.3 4.4 4.4 0 0 1 .1-3.2s1-.3 3.5 1.3a12 12 0 0 1 6.3 0c2.4-1.6 3.5-1.3 3.5-1.3a4.4 4.4 0 0 1 .1 3.2 4.7 4.7 0 0 1 1.2 3.3c0 4.7-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.3 11.3 0 0 0 12 .7z"/></svg></a></div>
+</header>
+<div class="layout"><aside class="sidebar"></aside><main class="main"><article class="doc"><div class="crumb">Commands  ›  Linux  ›  Kernel</div><h1>Linux Kernel</h1>
+<h2>1. Kernel Fundamentals</h2>
+<h3>Kernel چیست؟</h3>
+<h3>Kernel Space vs User Space</h3>
+<h3>Kernel Mode vs User Mode</h3>
+<h3>System Calls</h3>
+<ul>
+<li><code>open()</code></li>
+<li><code>read()</code></li>
+<li><code>write()</code></li>
+<li><code>fork()</code></li>
+<li><code>exec()</code></li>
+</ul>
+<h3>Kernel Modules</h3>
+<ul>
+<li><code>lsmod</code></li>
+<li><code>modprobe</code></li>
+<li><code>rmmod</code></li>
+</ul>
+<h3>Kernel Information</h3>
+<ul>
+<li><code>uname</code></li>
+<li><code>/proc</code></li>
+<li><code>/sys</code></li>
+</ul>
+<hr />
+<h2>2. Process Management</h2>
+<h3>Process</h3>
+<ul>
+<li>Process چیست؟</li>
+<li>PID</li>
+<li>PPID</li>
+<li>Parent Process</li>
+<li>Child Process</li>
+</ul>
+<h3>Process States</h3>
+<ul>
+<li>Running</li>
+<li>Sleeping</li>
+<li>Stopped</li>
+<li>Zombie</li>
+</ul>
+<h3>Process Creation</h3>
+<ul>
+<li><code>fork()</code></li>
+<li><code>exec()</code></li>
+</ul>
+<h3>Threads</h3>
+<h3>Context Switch</h3>
+<h3>Process Scheduling</h3>
+<ul>
+<li>Scheduler</li>
+<li>Priority</li>
+<li><code>nice</code></li>
+<li><code>renice</code></li>
+<li>CPU Time</li>
+</ul>
+<h3>Signals</h3>
+<ul>
+<li><code>SIGTERM</code></li>
+<li><code>SIGKILL</code></li>
+<li><code>SIGHUP</code></li>
+<li><code>SIGINT</code></li>
+</ul>
+<h3>Process Monitoring</h3>
+<ul>
+<li><code>ps</code></li>
+<li><code>top</code></li>
+<li><code>htop</code></li>
+<li><code>pidstat</code></li>
+<li><code>/proc/&lt;PID&gt;</code></li>
+</ul>
+<hr />
+<h2>3. Memory Management</h2>
+<h3>Memory Concepts</h3>
+<ul>
+<li>Physical Memory</li>
+<li>Virtual Memory</li>
+<li>Process Address Space</li>
+<li>Page</li>
+<li>Paging</li>
+<li>Page Table</li>
+<li>Page Fault</li>
+<li>Page Cache</li>
+<li><code>mmap</code></li>
+</ul>
+<h3>Swap</h3>
+<ul>
+<li>Swap چیست؟</li>
+<li>Swappiness</li>
+</ul>
+<h3>Memory Pressure</h3>
+<ul>
+<li>Memory Pressure</li>
+<li>OOM</li>
+<li>OOM Killer</li>
+</ul>
+<h3>Memory Monitoring</h3>
+<ul>
+<li><code>free</code></li>
+<li><code>vmstat</code></li>
+<li><code>/proc/meminfo</code></li>
+<li><code>top</code></li>
+</ul>
+<hr />
+<h2>4. File System &amp; VFS</h2>
+<h3>Virtual File System (VFS)</h3>
+<ul>
+<li>VFS</li>
+<li>inode</li>
+<li>dentry</li>
+</ul>
+<h3>File Descriptor</h3>
+<ul>
+<li>File Descriptor چیست؟</li>
+<li>File Descriptor Limits</li>
+<li><code>ulimit</code></li>
+<li><code>/proc/sys/fs/</code></li>
+</ul>
+<h3>File Systems</h3>
+<ul>
+<li>ext4</li>
+<li>XFS</li>
+<li>tmpfs</li>
+<li>procfs</li>
+<li>sysfs</li>
+</ul>
+<h3>Mount</h3>
+<h3>File System Monitoring</h3>
+<ul>
+<li><code>df</code></li>
+<li><code>du</code></li>
+<li><code>lsblk</code></li>
+<li><code>mount</code></li>
+</ul>
+<hr />
+<h2>5. I/O Management</h2>
+<h3>I/O Fundamentals</h3>
+<ul>
+<li>I/O چیست؟</li>
+<li>File Descriptor</li>
+<li><code>read()</code></li>
+<li><code>write()</code></li>
+</ul>
+<h3>I/O Models</h3>
+<ul>
+<li>Blocking I/O</li>
+<li>Non-blocking I/O</li>
+</ul>
+<h3>I/O Multiplexing</h3>
+<ul>
+<li><code>select</code></li>
+<li><code>poll</code></li>
+<li><code>epoll</code></li>
+</ul>
+<h3>Asynchronous I/O</h3>
+<ul>
+<li>Async I/O</li>
+<li><code>io_uring</code> (آشنایی)</li>
+</ul>
+<h3>I/O Monitoring</h3>
+<ul>
+<li><code>iostat</code></li>
+<li><code>iotop</code></li>
+<li><code>vmstat</code></li>
+</ul>
+<hr />
+<h2>6. Linux Networking</h2>
+<h3>Linux Network Stack</h3>
+<h3>Network Fundamentals</h3>
+<ul>
+<li>Network Interface</li>
+<li>IP Address</li>
+<li>Port</li>
+</ul>
+<h3>Socket</h3>
+<ul>
+<li>Socket چیست؟</li>
+<li>TCP Socket</li>
+<li>UDP Socket</li>
+<li>Unix Domain Socket</li>
+</ul>
+<h3>TCP</h3>
+<ul>
+<li>TCP Connection</li>
+<li>TCP States<ul>
+<li><code>LISTEN</code></li>
+<li><code>ESTABLISHED</code></li>
+<li><code>TIME_WAIT</code></li>
+<li><code>CLOSE_WAIT</code></li>
+</ul>
+</li>
+</ul>
+<h3>Routing</h3>
+<ul>
+<li>Routing</li>
+<li>Routing Table</li>
+</ul>
+<h3>DNS Basics</h3>
+<h3>Netfilter</h3>
+<ul>
+<li>Netfilter</li>
+<li><code>iptables</code></li>
+<li><code>nftables</code></li>
+</ul>
+<h3>Network Namespace</h3>
+<h3>Network Troubleshooting</h3>
+<ul>
+<li><code>ip</code></li>
+<li><code>ss</code></li>
+<li><code>ping</code></li>
+<li><code>traceroute</code></li>
+<li><code>dig</code></li>
+<li><code>curl</code></li>
+<li><code>tcpdump</code></li>
+<li><code>ethtool</code></li>
+</ul>
+<hr />
+<h2>7. Inter-Process Communication (IPC)</h2>
+<h3>IPC چیست؟</h3>
+<h3>IPC Mechanisms</h3>
+<ul>
+<li>Signals</li>
+<li>Pipe</li>
+<li>FIFO</li>
+<li>Shared Memory</li>
+<li>Unix Domain Socket</li>
+<li>Message Queue</li>
+</ul>
+<hr />
+<h2>8. Resource Isolation</h2>
+<h3>Linux Namespaces</h3>
+<ul>
+<li>Namespace چیست؟</li>
+<li>PID Namespace</li>
+<li>Network Namespace</li>
+<li>Mount Namespace</li>
+<li>User Namespace</li>
+<li>UTS Namespace</li>
+<li>IPC Namespace</li>
+<li>Cgroup Namespace</li>
+</ul>
+<h3>Control Groups (cgroups)</h3>
+<ul>
+<li>cgroups چیست؟</li>
+<li>CPU Limits</li>
+<li>Memory Limits</li>
+<li>I/O Limits</li>
+<li>cgroup v2</li>
+</ul>
+<h3>Containers</h3>
+<ul>
+<li>Container چیست؟</li>
+<li>Namespace + cgroups</li>
+<li>ارتباط Kernel با Docker</li>
+<li>ارتباط Kernel با Kubernetes</li>
+</ul>
+<hr />
+<h2>9. Kernel Security</h2>
+<h3>User &amp; Identity</h3>
+<ul>
+<li>UID</li>
+<li>GID</li>
+</ul>
+<h3>File Permissions</h3>
+<h3>Linux Capabilities</h3>
+<h3>seccomp</h3>
+<h3>Linux Security Modules (LSM)</h3>
+<ul>
+<li>SELinux</li>
+<li>AppArmor</li>
+</ul>
+<h3>Container Security</h3>
+<hr />
+<h2>10. Kernel Configuration &amp; Tuning</h2>
+<h3>Kernel Interfaces</h3>
+<ul>
+<li><code>/proc</code></li>
+<li><code>/sys</code></li>
+</ul>
+<h3>sysctl</h3>
+<ul>
+<li><code>sysctl</code></li>
+<li><code>sysctl -a</code></li>
+<li><code>/etc/sysctl.conf</code></li>
+<li><code>/etc/sysctl.d/</code></li>
+</ul>
+<h3>Kernel Tuning</h3>
+<ul>
+<li>Network Tuning</li>
+<li>TCP Tuning</li>
+<li>Memory Tuning</li>
+<li>File Descriptor Limits</li>
+</ul>
+<hr />
+<h2>11. Observability &amp; Troubleshooting</h2>
+<h3>Kernel Logs</h3>
+<ul>
+<li><code>dmesg</code></li>
+<li><code>journalctl -k</code></li>
+</ul>
+<h3>Kernel Information</h3>
+<ul>
+<li><code>/proc</code></li>
+<li><code>/sys</code></li>
+</ul>
+<h3>System Call Tracing</h3>
+<ul>
+<li><code>strace</code></li>
+</ul>
+<h3>Open Files</h3>
+<ul>
+<li><code>lsof</code></li>
+</ul>
+<h3>Performance Analysis</h3>
+<ul>
+<li><code>perf</code></li>
+<li><code>ftrace</code></li>
+<li>eBPF</li>
+</ul>
+<h3>Troubleshooting Methodology</h3>
+<h4>CPU Bottleneck</h4>
+<ul>
+<li><code>top</code></li>
+<li><code>htop</code></li>
+<li><code>pidstat</code></li>
+<li><code>perf</code></li>
+</ul>
+<h4>Memory Bottleneck</h4>
+<ul>
+<li><code>free</code></li>
+<li><code>vmstat</code></li>
+<li><code>/proc/meminfo</code></li>
+<li>OOM Killer</li>
+</ul>
+<h4>Disk I/O Bottleneck</h4>
+<ul>
+<li><code>iostat</code></li>
+<li><code>iotop</code></li>
+<li><code>vmstat</code></li>
+</ul>
+<h4>Network Bottleneck</h4>
+<ul>
+<li><code>ss</code></li>
+<li><code>ip</code></li>
+<li><code>tcpdump</code></li>
+<li><code>ethtool</code></li>
+</ul>
+<hr />
+<h2>12. Kernel Boot &amp; Runtime</h2>
+<h3>Boot Process</h3>
+<ol>
+<li>BIOS / UEFI</li>
+<li>Bootloader</li>
+<li>GRUB</li>
+<li>Kernel Loading</li>
+<li>initramfs</li>
+<li>Kernel Initialization</li>
+<li>PID 1</li>
+<li>systemd</li>
+</ol>
+</article></main>
+<aside class="rightbar"><div class="box"><div class="rbrand"><img src="../../../assets/logo.svg"><div><h3>infractl</h3><p style="margin:0">by prmctl</p></div></div><p>Open source knowledge base for infrastructure engineers.</p><ul class="list"><li>● Hands-on labs</li><li>● Production templates</li><li>● Incident runbooks</li><li>● Real-world experience</li></ul><a class="star" href="https://github.com/prmctl/infractl">★ Star on GitHub</a></div></aside></div>
+<script src="../../../assets/navigation.js"></script><script src="../../../assets/app.js"></script></body></html>

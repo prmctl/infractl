@@ -1,120 +1,38 @@
-# infractl
+# infractl · GitBook-style Infrastructure Handbook
 
-> Infrastructure for a more resilient tomorrow.
+A beautiful, fast, static documentation site built from Markdown, with automatic GitHub Pages deployment. The three primary collections are **Templates**, **Laboratories**, and **Common Commands**. Existing field notes, tools, runnable labs, and runbooks are preserved.
 
-`infractl` is an open-source practical infrastructure knowledge base by `prmctl`.
-
-It combines:
-
-- **Labs** — build, break, troubleshoot, recover.
-- **Templates** — reusable production-minded configuration.
-- **Runbooks** — incident procedures for real operations.
-- **Field Notes** — engineering notes and lessons.
-- **Tools** — small operational helpers.
-
-## Local preview
-
-Use the included server so the correct web root is always used:
+## Run locally
 
 ```bash
+python3 -m pip install -r requirements.txt
+python3 build.py
 python3 serve.py
 ```
 
-or:
+Open `http://localhost:8000`.
 
-```bash
-make serve
-```
+## Publish on GitHub Pages
 
-Open:
+1. Create a GitHub repository (e.g. `infractl`) and push **the contents of this directory** to its `main` or `master` branch.
+2. Go to **Settings → Pages → Build and deployment** and choose **GitHub Actions**.
+3. Push a change or manually run **Actions → Deploy infractl → Run workflow**.
+4. Open `https://YOUR-USERNAME.github.io/REPOSITORY/` (or your configured custom domain).
 
-```text
-http://localhost:8000
-```
+The workflow builds Markdown into static pages and deploys `site/`. No GitBook paid account or backend is needed; this is a **GitBook-inspired site**, not the proprietary GitBook platform.
 
+## Add a page
 
-## URL compatibility
+Create `docs/commands/linux/my-command.md` with a `# Title` heading, then commit and push. The sidebar is generated automatically by `build.py`.
 
-The site uses relative internal URLs, so the same static artifact works at:
+## Content locations
 
-```text
-http://localhost:8000/
-https://prmctl.github.io/infractl/
-https://infractl.prmctl.me/
-```
+- `docs/templates/` — reusable examples
+- `docs/lab/` — guided labs
+- `docs/commands/` — operational commands
+- `docs/field-notes/` — experiences
+- `labs/` — runnable exercises
+- `runbooks/` — incident guides
+- `site/assets/` — theme, JavaScript, icons
 
-No runtime `<base>` element is required.
-
-## GitHub Pages + custom domain
-
-Target:
-
-```text
-https://infractl.prmctl.me
-```
-
-Push the repository to:
-
-```text
-https://github.com/prmctl/infractl
-```
-
-The included GitHub Action deploys from `master`.
-
-GitHub:
-
-```text
-Settings -> Pages -> Source -> GitHub Actions
-Settings -> Pages -> Custom domain -> infractl.prmctl.me
-```
-
-Cloudflare:
-
-```text
-Type: CNAME
-Name: infractl
-Target: prmctl.github.io
-Proxy: DNS only
-```
-
-No VPS or separate web server is required.
-
-## Nested sidebar navigation
-
-The left navigation is a recursive collapsible tree. Each item can have `children`, and children can have their own `children`, so there is no fixed two-level limit.
-
-A recommended content hierarchy for technology posts is:
-
-```text
-docs/
-└── labs/
-    └── web-servers/
-        └── nginx/
-            ├── README.md
-            ├── architecture.md
-            ├── reverse-proxy.md
-            ├── tls.md
-            └── troubleshooting.md
-```
-
-The matching navigation shape in `site/assets/app.js` is:
-
-```js
-{
-  label: "Web Servers",
-  href: "labs/web-servers/",
-  children: [
-    {
-      label: "Nginx",
-      href: "labs/web-servers/nginx/",
-      children: [
-        { label: "Architecture", href: "labs/web-servers/nginx/architecture/" },
-        { label: "Reverse Proxy", href: "labs/web-servers/nginx/reverse-proxy/" },
-        { label: "TLS", href: "labs/web-servers/nginx/tls/" }
-      ]
-    }
-  ]
-}
-```
-
-Folders with children are shown as dropdowns. The branch containing the current page opens automatically, and manually opened branches are remembered in the browser.
+> Check examples for credentials or private infrastructure data before making the repository public.

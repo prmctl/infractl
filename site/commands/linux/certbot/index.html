@@ -1,0 +1,373 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Certbot — Important Commands Cheat Sheet · infractl</title><link rel="icon" href="../../../assets/logo.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="../../../assets/style.css"></head><body>
+<header class="top">
+<a class="brand" href="../../../"><img src="../../../assets/logo.svg"><div>infractl<small>by prmctl</small></div></a>
+<nav class="nav">
+<a href="../../../lab/"><svg class="icon-svg blue"><use href="../../../assets/icons.svg#labs"></use></svg><span>Laboratories<em>Hands-on</em></span></a>
+<a href="../../../templates/"><svg class="icon-svg green"><use href="../../../assets/icons.svg#template"></use></svg><span>Templates<em>Production Ready</em></span></a>
+<a href="../../../commands/"><svg class="icon-svg purple"><use href="../../../assets/icons.svg#runbook"></use></svg><span>Commands<em>Quick Reference</em></span></a>
+<a href="../../../field-notes/"><svg class="icon-svg purple"><use href="../../../assets/icons.svg#note"></use></svg><span>Field Notes<em>Real World</em></span></a>
+<a href="../../../tools/"><svg class="icon-svg cyan"><use href="../../../assets/icons.svg#tools"></use></svg><span>Tools<em>Utilities</em></span></a>
+</nav>
+<div class="toptools"><button id="menu-toggle" class="iconbtn mobile">☰</button><div class="search">⌕ <input placeholder="Search documentation..."></div><button id="theme-toggle" class="iconbtn" aria-label="Toggle theme">◐</button><a class="iconbtn" href="https://github.com/prmctl/infractl" aria-label="GitHub"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 .7a11.3 11.3 0 0 0-3.6 22c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.4 3.6 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.4-5.5-6a4.7 4.7 0 0 1 1.2-3.3 4.4 4.4 0 0 1 .1-3.2s1-.3 3.5 1.3a12 12 0 0 1 6.3 0c2.4-1.6 3.5-1.3 3.5-1.3a4.4 4.4 0 0 1 .1 3.2 4.7 4.7 0 0 1 1.2 3.3c0 4.7-2.8 5.7-5.5 6 .4.4.8 1.1.8 2.2v3.2c0 .3.2.7.8.6A11.3 11.3 0 0 0 12 .7z"/></svg></a></div>
+</header>
+<div class="layout"><aside class="sidebar"></aside><main class="main"><article class="doc"><div class="crumb">Commands  ›  Linux  ›  Certbot</div><h1>Certbot — Important Commands Cheat Sheet</h1>
+<h2>Check Certbot Version</h2>
+<pre><code class="language-bash"># Show the currently installed Certbot version.
+certbot --version
+</code></pre>
+<h2>Show Help</h2>
+<pre><code class="language-bash"># Show the main Certbot help and available commands.
+certbot --help
+</code></pre>
+<pre><code class="language-bash"># Show detailed help for all Certbot options.
+certbot --help all
+</code></pre>
+<hr />
+<h1>Certificate Management</h1>
+<h2>List Existing Certificates</h2>
+<pre><code class="language-bash"># List all certificates currently managed by Certbot,
+# including domain names, expiration dates, and certificate paths.
+sudo certbot certificates
+</code></pre>
+<p>Typical certificate files are stored under:</p>
+<pre><code class="language-text">/etc/letsencrypt/live/example.com/
+</code></pre>
+<p>Important files:</p>
+<pre><code class="language-text">cert.pem       # Server certificate
+chain.pem      # Intermediate CA certificate
+fullchain.pem  # Server certificate + intermediate certificates
+privkey.pem    # Private key
+</code></pre>
+<p>For most Nginx/Apache configurations, use:</p>
+<pre><code class="language-text">fullchain.pem
+privkey.pem
+</code></pre>
+<hr />
+<h1>Request a Certificate with Nginx</h1>
+<pre><code class="language-bash"># Obtain a certificate and automatically configure Nginx.
+sudo certbot --nginx -d example.com
+</code></pre>
+<pre><code class="language-bash"># Obtain one certificate covering both the root domain and www.
+sudo certbot --nginx \
+  -d example.com \
+  -d www.example.com
+</code></pre>
+<pre><code class="language-bash"># Obtain the certificate using the Nginx plugin,
+# but do NOT modify the Nginx configuration.
+sudo certbot certonly --nginx \
+  -d example.com \
+  -d www.example.com
+</code></pre>
+<hr />
+<h1>Request a Certificate with Apache</h1>
+<pre><code class="language-bash"># Obtain a certificate and automatically configure Apache.
+sudo certbot --apache -d example.com
+</code></pre>
+<pre><code class="language-bash"># Obtain a certificate for multiple domains using Apache.
+sudo certbot --apache \
+  -d example.com \
+  -d www.example.com
+</code></pre>
+<pre><code class="language-bash"># Obtain the certificate using Apache validation,
+# without modifying the Apache configuration.
+sudo certbot certonly --apache \
+  -d example.com
+</code></pre>
+<hr />
+<h1>Standalone Mode</h1>
+<pre><code class="language-bash"># Obtain a certificate using Certbot's temporary built-in HTTP server.
+# Port 80 must be available.
+sudo certbot certonly --standalone \
+  -d example.com
+</code></pre>
+<p>If Nginx is already using port 80:</p>
+<pre><code class="language-bash"># Stop Nginx before using standalone mode.
+sudo systemctl stop nginx
+
+sudo certbot certonly --standalone \
+  -d example.com
+
+sudo systemctl start nginx
+</code></pre>
+<p>Standalone mode is useful when no web server is installed or when Certbot should handle the ACME HTTP challenge itself.</p>
+<hr />
+<h1>Webroot Mode</h1>
+<pre><code class="language-bash"># Obtain a certificate without stopping the existing web server.
+# Certbot writes the ACME challenge under the specified web root.
+sudo certbot certonly --webroot \
+  -w /var/www/example.com \
+  -d example.com
+</code></pre>
+<p>For multiple domains sharing the same document root:</p>
+<pre><code class="language-bash">sudo certbot certonly --webroot \
+  -w /var/www/example.com \
+  -d example.com \
+  -d www.example.com
+</code></pre>
+<p>The web server must allow access to:</p>
+<pre><code class="language-text">/.well-known/acme-challenge/
+</code></pre>
+<hr />
+<h1>Certificate Renewal</h1>
+<h2>Renew Certificates</h2>
+<pre><code class="language-bash"># Renew all certificates that are close to expiration.
+sudo certbot renew
+</code></pre>
+<p>Certbot normally skips certificates that do not need renewal yet.</p>
+<hr />
+<h2>Test Automatic Renewal</h2>
+<pre><code class="language-bash"># Simulate the renewal process without replacing production certificates.
+sudo certbot renew --dry-run
+</code></pre>
+<p>This is one of the most important commands to run after setting up Certbot.</p>
+<hr />
+<h2>Force Renewal</h2>
+<pre><code class="language-bash"># Force renewal even if the certificate is not close to expiration.
+sudo certbot renew --force-renewal
+</code></pre>
+<p>Use this carefully because Let's Encrypt applies issuance rate limits.</p>
+<hr />
+<h2>Renew a Specific Certificate</h2>
+<p>First find the certificate name:</p>
+<pre><code class="language-bash">sudo certbot certificates
+</code></pre>
+<p>Then:</p>
+<pre><code class="language-bash"># Renew only the certificate with this Certbot certificate name.
+sudo certbot renew \
+  --cert-name example.com
+</code></pre>
+<hr />
+<h1>Reissue / Modify an Existing Certificate</h1>
+<pre><code class="language-bash"># Reissue an existing certificate and add another domain.
+sudo certbot --nginx \
+  --cert-name example.com \
+  -d example.com \
+  -d www.example.com \
+  -d api.example.com
+</code></pre>
+<p>This is useful when adding or removing SAN/domain names from an existing certificate.</p>
+<hr />
+<h1>Delete a Certificate</h1>
+<pre><code class="language-bash"># Safely remove a certificate managed by Certbot.
+sudo certbot delete
+</code></pre>
+<p>Or specify the certificate directly:</p>
+<pre><code class="language-bash">sudo certbot delete \
+  --cert-name example.com
+</code></pre>
+<p>Prefer <code>certbot delete</code> instead of manually deleting files from:</p>
+<pre><code class="language-text">/etc/letsencrypt/
+</code></pre>
+<hr />
+<h1>Revoke a Certificate</h1>
+<pre><code class="language-bash"># Revoke a certificate that should no longer be trusted.
+sudo certbot revoke \
+  --cert-path /etc/letsencrypt/live/example.com/cert.pem
+</code></pre>
+<p>After revocation, you can remove it from Certbot:</p>
+<pre><code class="language-bash">sudo certbot delete \
+  --cert-name example.com
+</code></pre>
+<p>Typical reasons for revocation include:</p>
+<ul>
+<li>Private key compromise</li>
+<li>Server compromise</li>
+<li>Certificate issued incorrectly</li>
+<li>Certificate no longer required</li>
+</ul>
+<hr />
+<h1>Wildcard Certificates</h1>
+<p>Wildcard certificates usually require DNS validation.</p>
+<p>Example:</p>
+<pre><code class="language-bash"># Request a wildcard certificate using a manual DNS challenge.
+sudo certbot certonly \
+  --manual \
+  --preferred-challenges dns \
+  -d example.com \
+  -d '*.example.com'
+</code></pre>
+<p>Certbot will ask you to create a DNS TXT record similar to:</p>
+<pre><code class="language-text">_acme-challenge.example.com
+</code></pre>
+<p>Manual DNS validation is not ideal for unattended automatic renewal.</p>
+<p>For production systems, prefer a Certbot DNS plugin supported by your DNS provider.</p>
+<hr />
+<h1>Check Automatic Renewal Timer</h1>
+<p>On systemd-based distributions:</p>
+<pre><code class="language-bash"># Check whether the Certbot renewal timer exists and is active.
+systemctl status certbot.timer
+</code></pre>
+<pre><code class="language-bash"># List Certbot-related timers.
+systemctl list-timers | grep certbot
+</code></pre>
+<p>On Snap installations, the timer/service naming may differ.</p>
+<hr />
+<h1>Check Certbot Service Logs</h1>
+<pre><code class="language-bash"># View Certbot-related systemd logs.
+sudo journalctl -u certbot
+</code></pre>
+<pre><code class="language-bash"># Show recent Certbot log entries.
+sudo journalctl -u certbot --since today
+</code></pre>
+<p>Certbot also normally writes logs under:</p>
+<pre><code class="language-text">/var/log/letsencrypt/
+</code></pre>
+<p>The primary log file is commonly:</p>
+<pre><code class="language-text">/var/log/letsencrypt/letsencrypt.log
+</code></pre>
+<p>View it with:</p>
+<pre><code class="language-bash">sudo less /var/log/letsencrypt/letsencrypt.log
+</code></pre>
+<hr />
+<h1>Renewal Hooks</h1>
+<p>Hooks are useful when a service must reload after certificate renewal.</p>
+<h2>Deploy Hook</h2>
+<pre><code class="language-bash"># Reload Nginx only after a certificate has actually been renewed.
+sudo certbot renew \
+  --deploy-hook &quot;systemctl reload nginx&quot;
+</code></pre>
+<p>Example for HAProxy:</p>
+<pre><code class="language-bash">sudo certbot renew \
+  --deploy-hook &quot;systemctl reload haproxy&quot;
+</code></pre>
+<hr />
+<h2>Pre Hook</h2>
+<pre><code class="language-bash"># Execute a command before attempting renewal.
+sudo certbot renew \
+  --pre-hook &quot;systemctl stop nginx&quot;
+</code></pre>
+<hr />
+<h2>Post Hook</h2>
+<pre><code class="language-bash"># Execute a command after Certbot finishes the renewal process.
+sudo certbot renew \
+  --post-hook &quot;systemctl start nginx&quot;
+</code></pre>
+<p>A common standalone example:</p>
+<pre><code class="language-bash">sudo certbot renew \
+  --pre-hook &quot;systemctl stop nginx&quot; \
+  --post-hook &quot;systemctl start nginx&quot;
+</code></pre>
+<hr />
+<h1>Non-Interactive Mode</h1>
+<p>Useful for scripts and automation:</p>
+<pre><code class="language-bash"># Request a certificate without interactive prompts.
+sudo certbot certonly \
+  --standalone \
+  --non-interactive \
+  --agree-tos \
+  --email admin@example.com \
+  -d example.com
+</code></pre>
+<hr />
+<h1>Register Without Email</h1>
+<pre><code class="language-bash"># Register an ACME account without providing an email address.
+# Generally not recommended because expiration/security notices may be missed.
+sudo certbot certonly \
+  --standalone \
+  --register-unsafely-without-email \
+  --agree-tos \
+  -d example.com
+</code></pre>
+<p>Using a real administrative email is usually preferable.</p>
+<hr />
+<h1>Staging Environment</h1>
+<pre><code class="language-bash"># Use Let's Encrypt staging environment for testing.
+# Certificates generated this way are NOT trusted by browsers.
+sudo certbot certonly \
+  --standalone \
+  --staging \
+  -d example.com
+</code></pre>
+<p>Staging is useful when debugging certificate issuance because it avoids production rate limits.</p>
+<hr />
+<h1>Verbose / Debug Output</h1>
+<pre><code class="language-bash"># Show more detailed Certbot output.
+sudo certbot renew -v
+</code></pre>
+<p>For even more debugging information:</p>
+<pre><code class="language-bash">sudo certbot renew -vv
+</code></pre>
+<hr />
+<h1>Useful Certificate Inspection Commands</h1>
+<h2>Check Certificate Expiration</h2>
+<pre><code class="language-bash"># Display start and expiration dates of the currently installed certificate.
+sudo openssl x509 \
+  -in /etc/letsencrypt/live/example.com/fullchain.pem \
+  -noout \
+  -dates
+</code></pre>
+<h2>Show Certificate Subject and Issuer</h2>
+<pre><code class="language-bash">sudo openssl x509 \
+  -in /etc/letsencrypt/live/example.com/cert.pem \
+  -noout \
+  -subject \
+  -issuer
+</code></pre>
+<h2>Show Domains Inside the Certificate</h2>
+<pre><code class="language-bash">sudo openssl x509 \
+  -in /etc/letsencrypt/live/example.com/cert.pem \
+  -noout \
+  -ext subjectAltName
+</code></pre>
+<hr />
+<h1>Recommended Routine Checks</h1>
+<pre><code class="language-bash"># Show managed certificates.
+sudo certbot certificates
+</code></pre>
+<pre><code class="language-bash"># Test certificate renewal.
+sudo certbot renew --dry-run
+</code></pre>
+<pre><code class="language-bash"># Check automatic renewal timer.
+systemctl list-timers | grep certbot
+</code></pre>
+<pre><code class="language-bash"># Check certificate expiration directly.
+sudo openssl x509 -in /etc/letsencrypt/live/example.com/fullchain.pem -noout -dates
+</code></pre>
+<hr />
+<h1>Quick Reference</h1>
+<pre><code class="language-bash"># List certificates
+sudo certbot certificates
+
+# Nginx: obtain + install certificate
+sudo certbot --nginx -d example.com
+
+# Nginx: obtain certificate only
+sudo certbot certonly --nginx -d example.com
+
+# Apache
+sudo certbot --apache -d example.com
+
+# Standalone
+sudo certbot certonly --standalone -d example.com
+
+# Webroot
+sudo certbot certonly --webroot -w /var/www/example.com -d example.com
+
+# Renew certificates
+sudo certbot renew
+
+# Test renewal
+sudo certbot renew --dry-run
+
+# Force renewal
+sudo certbot renew --force-renewal
+
+# List certificates
+sudo certbot certificates
+
+# Delete certificate
+sudo certbot delete --cert-name example.com
+
+# Revoke certificate
+sudo certbot revoke \
+  --cert-path /etc/letsencrypt/live/example.com/cert.pem
+
+# Check renewal timer
+systemctl list-timers | grep certbot
+
+# View Certbot logs
+sudo less /var/log/letsencrypt/letsencrypt.log
+</code></pre>
+</article></main>
+<aside class="rightbar"><div class="box"><div class="rbrand"><img src="../../../assets/logo.svg"><div><h3>infractl</h3><p style="margin:0">by prmctl</p></div></div><p>Open source knowledge base for infrastructure engineers.</p><ul class="list"><li>● Hands-on labs</li><li>● Production templates</li><li>● Incident runbooks</li><li>● Real-world experience</li></ul><a class="star" href="https://github.com/prmctl/infractl">★ Star on GitHub</a></div></aside></div>
+<script src="../../../assets/navigation.js"></script><script src="../../../assets/app.js"></script></body></html>

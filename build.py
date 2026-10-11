@@ -17,15 +17,16 @@ SITE = ROOT / "site"
 ASSETS = SITE / "assets"
 
 SECTION_META = {
-    "labs": ("Labs · Break & Learn", "blue"),
-    "templates": ("Templates · Copy & Use", "green"),
-    "runbooks": ("Runbooks · Incident Guides", "purple"),
-    "field-notes": ("Field Notes · Real World", "purple"),
+    "templates": ("Templates · Reusable Configs", "green"),
+    "lab": ("Laboratories · Hands-on", "blue"),
+    "commands": ("Common Commands · Quick Reference", "cyan"),
+    "field-notes": ("Field Notes · Experience", "purple"),
     "tools": ("Tools · Utilities", "cyan"),
 }
 
+
 ICON_MAP = {
-    "labs": "labs", "templates": "template", "runbooks": "runbook",
+    "lab": "labs", "commands": "tools", "labs": "labs", "templates": "template", "runbooks": "runbook",
     "field-notes": "note", "tools": "tools", "dns": "dns",
     "web-servers": "server", "databases": "db", "kubernetes": "k8s",
     "networking": "net", "storage": "storage", "observability": "observe",
@@ -135,9 +136,9 @@ def page_shell(title: str, href: str, body: str) -> str:
 <header class="top">
 <a class="brand" href="{p}"><img src="{p}assets/logo.svg"><div>infractl<small>by prmctl</small></div></a>
 <nav class="nav">
-<a href="{p}labs/"><svg class="icon-svg blue"><use href="{p}assets/icons.svg#labs"></use></svg><span>Labs<em>Break & Learn</em></span></a>
+<a href="{p}lab/"><svg class="icon-svg blue"><use href="{p}assets/icons.svg#labs"></use></svg><span>Laboratories<em>Hands-on</em></span></a>
 <a href="{p}templates/"><svg class="icon-svg green"><use href="{p}assets/icons.svg#template"></use></svg><span>Templates<em>Production Ready</em></span></a>
-<a href="{p}runbooks/"><svg class="icon-svg purple"><use href="{p}assets/icons.svg#runbook"></use></svg><span>Runbooks<em>Incident Guides</em></span></a>
+<a href="{p}commands/"><svg class="icon-svg purple"><use href="{p}assets/icons.svg#runbook"></use></svg><span>Commands<em>Quick Reference</em></span></a>
 <a href="{p}field-notes/"><svg class="icon-svg purple"><use href="{p}assets/icons.svg#note"></use></svg><span>Field Notes<em>Real World</em></span></a>
 <a href="{p}tools/"><svg class="icon-svg cyan"><use href="{p}assets/icons.svg#tools"></use></svg><span>Tools<em>Utilities</em></span></a>
 </nav>
