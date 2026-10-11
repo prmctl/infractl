@@ -1,0 +1,1045 @@
+# Server Infrastructure Monitoring & Comparison
+
+A centralized Grafana dashboard for **real-time server monitoring and performance comparison**, powered by Prometheus and Node Exporter.
+
+## Key Features
+
+- **Multi-Select:** Select multiple servers for simultaneous monitoring.
+- **Select All:** Display all servers by default.
+- **Server Health:** Monitor server availability (UP/DOWN).
+- **Resource Monitoring:** Track CPU, RAM, Disk, and Swap usage.
+- **Network Monitoring:** Monitor incoming (RX) and outgoing (TX) traffic.
+- **Server Comparison:** Compare selected servers using interactive charts.
+- **Hostname & IP:** Display server hostnames alongside their IP addresses.
+- **Uptime:** Track server uptime and availability.
+
+## How to Use
+
+1. Select servers using the `Servers` dropdown.
+2. Choose `All` to monitor every server.
+3. Use **Compare Selected Servers** to analyze performance differences.
+4. Check the **All Servers** table for a complete infrastructure overview.
+
+## Technology Stack
+
+`Grafana` · `Prometheus` · `Node Exporter` · `PromQL`
+
+**Goal:** Simplify infrastructure monitoring, identify performance bottlenecks, and enable efficient server management through centralized visualization.
+
+```json
+{
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    }
+  ],
+  "title": "Server Infrastructure — Multi Select & Comparison",
+  "uid": null,
+  "tags": [
+    "node-exporter",
+    "infrastructure",
+    "overview"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "server",
+        "label": "Servers (multi-select)",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "query": {
+          "query": "query_result(up{job=~\"node-exporter|node-exporter-https\"})",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "definition": "query_result(up{job=~\"node-exporter|node-exporter-https\"})",
+        "regex": "/hostname=\"(?<text>[^\"]+)\".*instance=\"(?<value>[^\"]+)\"/",
+        "sort": 1,
+        "refresh": 1,
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "hide": 0,
+        "skipUrlSync": false
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Targets UP",
+      "type": "stat",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "sum(up{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"})",
+          "refId": "A",
+          "legendFormat": "{{instance}}",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Targets DOWN",
+      "type": "stat",
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "count(up{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"}) - sum(up{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"})",
+          "refId": "A",
+          "legendFormat": "{{instance}}",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Average CPU %",
+      "type": "stat",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "avg(100 * (1 - avg by(instance) (rate(node_cpu_seconds_total{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mode=\"idle\"}[5m]))))",
+          "refId": "A",
+          "legendFormat": "{{instance}}",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Average RAM %",
+      "type": "stat",
+      "gridPos": {
+        "x": 18,
+        "y": 0,
+        "w": 6,
+        "h": 4
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "avg(100 * (1 - node_memory_MemAvailable_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"} / node_memory_MemTotal_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"}))",
+          "refId": "A",
+          "legendFormat": "{{instance}}",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "All Servers — Hostname | IP | Status | CPU | RAM | Disk | Swap | Uptime",
+      "type": "table",
+      "gridPos": {
+        "x": 0,
+        "y": 38,
+        "w": 24,
+        "h": 12
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "label_join((up{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"}), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "A",
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "expr": "label_join((100 * (1 - avg by(instance,hostname,job)(rate(node_cpu_seconds_total{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mode=\"idle\"}[5m])))), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "B",
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "expr": "label_join((100 * (1 - node_memory_MemAvailable_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"}/node_memory_MemTotal_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"})), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "C",
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "expr": "label_join((100 * (1 - node_filesystem_avail_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mountpoint=\"/\",fstype!~\"tmpfs|overlay\"}/node_filesystem_size_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mountpoint=\"/\",fstype!~\"tmpfs|overlay\"})), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "D",
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "expr": "label_join((100 * (1 - node_memory_SwapFree_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"}/clamp_min(node_memory_SwapTotal_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"}, 1))), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "E",
+          "instant": true,
+          "format": "table"
+        },
+        {
+          "expr": "label_join(((time() - node_boot_time_seconds{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"})/86400), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "F",
+          "instant": true,
+          "format": "table"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm"
+      },
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "server",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "instance": true,
+              "job": true,
+              "hostname": true
+            },
+            "renameByName": {
+              "Value #A": "UP",
+              "Value #B": "CPU %",
+              "Value #C": "RAM %",
+              "Value #D": "Root Disk %",
+              "Value #E": "Swap %",
+              "Value #F": "Uptime (days)",
+              "server": "Hostname | IP"
+            },
+            "indexByName": {
+              "server": 0,
+              "Value #A": 1,
+              "Value #B": 2,
+              "Value #C": 3,
+              "Value #D": 4,
+              "Value #E": 5,
+              "Value #F": 6
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "CPU by Server",
+      "type": "bargauge",
+      "gridPos": {
+        "x": 0,
+        "y": 4,
+        "w": 12,
+        "h": 9
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "label_join((100 * (1 - avg by(instance,hostname,job) (rate(node_cpu_seconds_total{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mode=\"idle\"}[5m])))), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "A",
+          "legendFormat": "{{hostname}} | {{instance}}",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "RAM by Server",
+      "type": "bargauge",
+      "gridPos": {
+        "x": 12,
+        "y": 4,
+        "w": 12,
+        "h": 9
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "label_join((100 * (1 - node_memory_MemAvailable_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"} / node_memory_MemTotal_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"})), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "A",
+          "legendFormat": "{{hostname}} | {{instance}}",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Root Disk by Server",
+      "type": "bargauge",
+      "gridPos": {
+        "x": 0,
+        "y": 13,
+        "w": 12,
+        "h": 9
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "label_join((100 * (1 - node_filesystem_avail_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mountpoint=\"/\",fstype!~\"tmpfs|overlay\"} / node_filesystem_size_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mountpoint=\"/\",fstype!~\"tmpfs|overlay\"})), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "A",
+          "legendFormat": "{{hostname}} | {{instance}}",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Load / CPU cores by Server",
+      "type": "bargauge",
+      "gridPos": {
+        "x": 12,
+        "y": 13,
+        "w": 12,
+        "h": 9
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "label_join((100 * node_load5{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"} / on(instance,hostname,job) count by(instance,hostname,job)(node_cpu_seconds_total{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mode=\"idle\"})), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "A",
+          "legendFormat": "{{hostname}} | {{instance}}",
+          "instant": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      }
+    },
+    {
+      "id": 10,
+      "title": "Network RX by Server",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 22,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "label_join((sum by(instance,hostname,job)(rate(node_network_receive_bytes_total{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",device!~\"lo|veth.*|docker.*|br-.*\"}[5m]))), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "A",
+          "legendFormat": "{{hostname}} | {{instance}}",
+          "instant": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 11,
+      "title": "Network TX by Server",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 12,
+        "y": 22,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "label_join((sum by(instance,hostname,job)(rate(node_network_transmit_bytes_total{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",device!~\"lo|veth.*|docker.*|br-.*\"}[5m]))), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "A",
+          "legendFormat": "{{hostname}} | {{instance}}",
+          "instant": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 12,
+      "title": "Server Availability (1=UP, 0=DOWN)",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 30,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "targets": [
+        {
+          "expr": "label_join((up{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"}), \"server\", \" | \", \"hostname\", \"instance\")",
+          "refId": "A",
+          "legendFormat": "{{hostname}} | {{instance}}",
+          "instant": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 75
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {}
+    },
+    {
+      "id": 13,
+      "type": "row",
+      "title": "Compare Selected Servers — CPU / RAM / Disk / Network",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 50
+      },
+      "panels": []
+    },
+    {
+      "id": 14,
+      "title": "CPU comparison (%)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 51,
+        "w": 12,
+        "h": 9
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "100 * (1 - avg by(instance,hostname,job)(rate(node_cpu_seconds_total{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mode=\"idle\"}[5m])))",
+          "legendFormat": "{{hostname}} | {{instance}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "max": 100
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "title": "RAM comparison (%)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 51,
+        "w": 12,
+        "h": 9
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "100 * (1 - node_memory_MemAvailable_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"} / node_memory_MemTotal_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\"})",
+          "legendFormat": "{{hostname}} | {{instance}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "max": 100
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "id": 16,
+      "title": "Root disk comparison (%)",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 60,
+        "w": 12,
+        "h": 9
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "100 * (1 - node_filesystem_avail_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mountpoint=\"/\",fstype!~\"tmpfs|overlay\"} / node_filesystem_size_bytes{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",mountpoint=\"/\",fstype!~\"tmpfs|overlay\"})",
+          "legendFormat": "{{hostname}} | {{instance}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "max": 100
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "title": "Network RX comparison",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 60,
+        "w": 12,
+        "h": 9
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(instance,hostname,job)(rate(node_network_receive_bytes_total{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",device!~\"lo|veth.*|docker.*|br-.*\"}[5m]))",
+          "legendFormat": "{{hostname}} | {{instance}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "title": "Network TX comparison",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 69,
+        "w": 12,
+        "h": 9
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(instance,hostname,job)(rate(node_network_transmit_bytes_total{job=~\"node-exporter|node-exporter-https\",instance=~\"${server:regex}\",device!~\"lo|veth.*|docker.*|br-.*\"}[5m]))",
+          "legendFormat": "{{hostname}} | {{instance}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    }
+  ],
+  "description": "Node exporter infrastructure overview for the supplied Prometheus jobs. Hostnames are read dynamically from the hostname label; no hardcoded server names.",
+  "id": null
+}
+
+```
