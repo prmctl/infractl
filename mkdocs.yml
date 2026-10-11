@@ -1,38 +1,50 @@
+
 site_name: infractl
 site_url: https://infractl.prmctl.me/
-site_description: Infrastructure notes and references
+site_description: Personal infrastructure documentation
+
 repo_url: https://github.com/prmctl/infractl
 repo_name: prmctl/infractl
+
 docs_dir: docs
 site_dir: site
+
 use_directory_urls: true
+
 theme:
   name: material
   language: en
-  features:
-  - navigation.indexes
-  - search.highlight
-  - content.code.copy
-  palette:
-  - scheme: slate
-    primary: blue grey
-    accent: cyan
-    toggle:
-      icon: material/weather-sunny
-      name: Switch to light mode
-  - scheme: default
-    primary: blue grey
-    accent: cyan
-    toggle:
-      icon: material/weather-night
-      name: Switch to dark mode
+
   font: false
-extra_css:
-- stylesheets/compact.css
-markdown_extensions:
-- admonition
-- pymdownx.superfences
-- pymdownx.highlight:
-    anchor_linenums: true
+
+  palette:
+    - scheme: slate
+      primary: blue grey
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+    - scheme: default
+      primary: blue grey
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+  features:
+    - navigation.indexes
+    - search.highlight
+    - content.code.copy
+
 plugins:
-- search
+  - search
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+
+extra_css:
+  - stylesheets/compact.css
