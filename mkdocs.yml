@@ -1,6 +1,6 @@
 site_name: infractl
 site_description: Infrastructure notes, labs and commands
-site_url: ""
+site_url: "https://prmctl.github.io/infractl/"
 docs_dir: docs
 site_dir: _site
 theme:
