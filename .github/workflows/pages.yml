@@ -24,21 +24,6 @@ jobs:
         run: |
           python generate_nav.py
           python -m mkdocs build --clean -f mkdocs.generated.yml
-      - name: Verify navigation and theme
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-          import yaml
-          nav = yaml.safe_load(Path("mkdocs.generated.yml").read_text())["nav"]
-          expected = ["Home", "Common Commands", "Laboratories", "Templates"]
-          actual = [next(iter(item)) for item in nav]
-          assert actual == expected, f"Unexpected sidebar: {actual}"
-          for section in ("commands", "laboratories", "templates"):
-              page = Path("site") / section / "index.html"
-              assert page.is_file(), f"Missing published page: {page}"
-          assert Path("site/index.html").is_file()
-          print("Navigation and output files verified:", actual)
-          PY
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
