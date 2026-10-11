@@ -1,0 +1,17 @@
+/* Compact, readable technical documentation */
+:root { --md-text-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+.md-grid { max-width: none; margin-left: 1.25rem; margin-right: 1.25rem; }
+.md-main__inner { margin-top: .65rem; }
+.md-content__inner { margin: .55rem 0 1rem; padding: 0 .6rem; }
+.md-content__inner > :first-child { margin-top: .25rem; }
+.md-sidebar { padding-top: .4rem; }
+.md-sidebar__scrollwrap { margin: 0; }
+.md-nav__link { margin-top: .35rem; }
+.md-typeset h1 { margin: 0 0 .8rem; }
+.md-typeset h2 { margin: 1.2rem 0 .55rem; }
+@media screen and (min-width: 76.25em) {
+  .md-sidebar--primary { width: 12.5rem; }
+  .md-sidebar--secondary { width: 11rem; }
+  .md-content { max-width: none; }
+}
+@media screen and (max-width: 76.24em) { .md-grid { margin-left: auto; margin-right: auto; } }

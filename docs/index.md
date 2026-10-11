@@ -1,13 +1,9 @@
 # infractl
 
-Infrastructure notes, configuration examples, labs, and commands.
+Personal infrastructure documentation.
 
-This is a working notebook. Content is maintained as Markdown in GitHub.
+- [Common Commands](commands/index.md)
+- [Laboratories](laboratories/index.md)
+- [Templates](templates/index.md)
 
-## Browse
-
-- [Templates](templates/README.md) — configuration examples to adapt and review.
-- [Laboratories](lab/README.md) — experiments, troubleshooting, and runbooks.
-- [Common commands](commands/README.md) — command references and operational snippets.
-
-Examples are not production defaults. Review commands and replace environment-specific values before use.
+Add Markdown files under any section. Nested folders appear automatically in the navigation.

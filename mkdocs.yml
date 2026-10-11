@@ -1,82 +1,29 @@
 site_name: infractl
-site_description: Infrastructure notes, labs and commands
-site_url: https://prmctl.github.io/infractl/
+site_url: https://infractl.prmctl.me/
+site_description: Infrastructure notes and references
+repo_url: https://github.com/prmctl/infractl
+repo_name: prmctl/infractl
 docs_dir: docs
 site_dir: site
+use_directory_urls: true
 theme:
   name: material
   language: en
-  palette:
-  - scheme: default
-    primary: blue grey
-    accent: blue grey
-    toggle:
-      icon: material/brightness-7
-      name: Dark mode
-  - scheme: slate
-    primary: blue grey
-    accent: blue grey
-    toggle:
-      icon: material/brightness-4
-      name: Light mode
   features:
-  - navigation.sections
-  - navigation.indexes
-  - search.highlight
-  - content.code.copy
+    - navigation.indexes
+    - navigation.path
+    - search.highlight
+    - content.code.copy
+  palette:
+    scheme: slate
   font: false
-plugins:
-- search
+extra_css:
+  - stylesheets/compact.css
 markdown_extensions:
-- admonition
-- tables
-- pymdownx.superfences
-- pymdownx.highlight:
-    anchor_linenums: true
-- toc:
-    permalink: true
-nav:
-- Home: index.md
-- Templates:
-  - Overview: templates/README.md
-  - Databases: templates/databases/README.md
-  - Kubernetes: templates/kubernetes/README.md
-  - Linux System: templates/linux-system/README.md
-  - Web Servers: templates/web-servers/README.md
-  - Nginx: templates/web-servers/nginx.md
-- Laboratories:
-  - Overview: lab/README.md
-  - Databases: lab/databases/README.md
-  - Dns: lab/dns/README.md
-  - Resolution Failure: lab/dns/resolution-failure.md
-  - Kubernetes: lab/kubernetes/README.md
-  - System: lab/system/README.md
-  - Web Servers: lab/web-servers/README.md
-  - Readme: field-notes/README.md
-  - Readme: tools/README.md
-- Common Commands:
-  - Overview: commands/README.md
-  - Databases: commands/databases/README.md
-  - Dns: commands/dns/README.md
-  - Bind9: commands/dns/bind9.md
-  - Coredns: commands/dns/coredns.md
-  - Unbound: commands/dns/unbound.md
-  - Kubernetes: commands/kubernetes/README.md
-  - Linux: commands/linux/README.md
-  - Certbot: commands/linux/certbot.md
-  - Kernel: commands/linux/kernel.md
-  - Open Vpn: commands/linux/open-vpn.md
-  - Ssh: commands/linux/ssh.md
-  - Ssl: commands/linux/ssl.md
-  - Systemd: commands/linux/systemd.md
-  - Networking: commands/networking/README.md
-  - Observability: commands/observability/README.md
-  - Prometheus Install: commands/observability/prometheus-install.md
-  - Security: commands/security/README.md
-  - Storage: commands/storage/README.md
-  - Architecture: commands/storage/seaweedfs/architecture.md
-  - Installation Guide: commands/storage/seaweedfs/installation-guide.md
-  - Web Servers: commands/web-servers/README.md
-  - Nginx: commands/web-servers/nginx/README.md
-  - Architecture: commands/web-servers/nginx/architecture.md
-  - Nginx: commands/web-servers/nginx/nginx.md
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+plugins:
+  - search
+# No nav: MkDocs discovers new nested folders and Markdown pages automatically.
