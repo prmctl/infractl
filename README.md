@@ -1,20 +1,19 @@
 # infractl
 
-Minimal documentation with **Common Commands**, **Laboratories**, and **Templates**.
+Three sections: **Common Commands**, **Laboratories**, **Templates**.
 
-## Publish
+Add Markdown files in arbitrarily nested folders inside `docs/commands`, `docs/laboratories`, or `docs/templates`. Sidebar navigation is regenerated automatically during each deployment.
 
-Push the entire contents of this directory (including `.github/`) to the root of `prmctl/infractl` on `master`. In repository Settings → Pages, select **GitHub Actions**.
-
-## Add content
-
-Add Markdown files or nested directories inside `docs/commands`, `docs/laboratories`, or `docs/templates`. Navigation discovers them automatically. `.pages` files control section names and top-level order.
-
-## Run locally
+## Local preview
 
 ```bash
 python -m pip install -r requirements.txt
-python -m mkdocs serve
+python generate_nav.py
+python -m mkdocs serve -f mkdocs.generated.yml
 ```
 
-Theme toggle is provided by Material for MkDocs and persists between pages. Custom domain: `infractl.prmctl.me`.
+## GitHub Pages
+
+Push all files, including `.github/workflows/pages.yml`, to `master`. Set **Settings → Pages → Source: GitHub Actions**.
+
+The custom domain is `infractl.prmctl.me`. The theme supports dark and light modes.

@@ -36,4 +36,3 @@ markdown_extensions:
     anchor_linenums: true
 plugins:
 - search
-- awesome-pages
