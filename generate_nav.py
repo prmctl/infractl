@@ -1,4 +1,5 @@
-"""Generate deterministic MkDocs sidebar from nested Markdown directories."""
+
+"""Generate a complete MkDocs navigation and folder landing pages."""
 from pathlib import Path
 import yaml
 
@@ -6,37 +7,35 @@ ROOT = Path(__file__).resolve().parent
 DOCS = ROOT / "docs"
 SECTIONS = (("Common Commands", "commands"), ("Laboratories", "laboratories"), ("Templates", "templates"))
 
-def label(name):
-    return name.replace("-", " ").replace("_", " ").title()
+def label(value):
+    return value.replace("-", " ").replace("_", " ").title()
 
 def walk(folder):
-    result = []
     index = folder / "index.md"
-    if index.is_file():
-        result.append({"Overview": index.relative_to(DOCS).as_posix()})
+    if not index.exists():
+        # Never overwrite authored pages; only create missing landing pages.
+        index.write_text("# " + label(folder.name) + "\n\nPages in this section are listed in the sidebar.\n", encoding="utf-8")
+    children = [index.relative_to(DOCS).as_posix()]
     for sub in sorted((p for p in folder.iterdir() if p.is_dir() and not p.name.startswith(".")), key=lambda p: p.name.lower()):
-        children = walk(sub)
-        if children:
-            result.append({label(sub.name): children})
-    for f in sorted(folder.glob("*.md"), key=lambda p: p.name.lower()):
-        if f.name != "index.md":
-            result.append({label(f.stem): f.relative_to(DOCS).as_posix()})
-    return result
+        if any(sub.rglob("*.md")):
+            children.append({label(sub.name): walk(sub)})
+    for page in sorted(folder.glob("*.md"), key=lambda p: p.name.lower()):
+        if page.name != "index.md":
+            children.append({label(page.stem): page.relative_to(DOCS).as_posix()})
+    return children
 
 def main():
-    cfg = yaml.safe_load((ROOT / "mkdocs.yml").read_text(encoding="utf-8"))
-    nav = [{"Home": "index.md"}]
-    for title, dirname in SECTIONS:
-        folder = DOCS / dirname
+    config = yaml.safe_load((ROOT / "mkdocs.yml").read_text(encoding="utf-8"))
+    # MkDocs Material's navigation.indexes turns the first index page into
+    # the clickable section title (rather than a separate Overview link).
+    config["nav"] = [{"Home": "index.md"}]
+    for title, directory in SECTIONS:
+        folder = DOCS / directory
         folder.mkdir(parents=True, exist_ok=True)
-        if not (folder / "index.md").exists():
-            (folder / "index.md").write_text("# " + title + "\n", encoding="utf-8")
-        nav.append({title: walk(folder)})
-    cfg["nav"] = nav
+        config["nav"].append({title: walk(folder)})
     output = ROOT / "mkdocs.generated.yml"
-    output.write_text(yaml.safe_dump(cfg, allow_unicode=True, sort_keys=False), encoding="utf-8")
-    print("Generated sidebar:", [list(item)[0] for item in nav])
-    assert len(nav) == 4
+    output.write_text(yaml.safe_dump(config, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    print("Sidebar sections:", [next(iter(x)) for x in config["nav"]])
 
 if __name__ == "__main__":
     main()
