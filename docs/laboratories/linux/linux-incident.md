@@ -60,7 +60,7 @@ df -h /mnt/inode-lab
 df -i /mnt/inode-lab
 ```
 
-```sh 
+```sh
 mountpoint /mnt/inode-lab && python3 - <<'PY'
 from pathlib import Path
 
