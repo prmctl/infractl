@@ -2,8 +2,6 @@
 
 A Bash fault-injection and recovery lab for learning Linux storage and filesystem troubleshooting on a **disposable, dedicated Linux VPS**. It uses loop-backed image files for most exercises. A small, explicit set of Level 5 scenarios modifies the VPS host itself.
 
-The attached script may have `v18` in its uploaded filename, but its contents identify it as v19. Rename it to `storage-fault-lab.sh` before using the commands below so the documentation and script path agree.
-
 ## What this lab teaches
 
 The 101 scenarios cover filesystem permissions and inode attributes, mount state and options, ext4, XFS, Btrfs, LVM, md RAID, LUKS, device mapper, I/O behavior, deleted-but-open files, partition-table recovery, and a file-level backup restoration drill. The intended workflow is to investigate symptoms before using `hint` or `reveal`, repair the problem, and verify the result with tools appropriate to the affected layer.
@@ -28,12 +26,10 @@ Run `doctor` to inspect available commands and devices before starting. Missing 
 ## Start the lab
 
 ```bash
-mv 'storage-fault-lab-v18 (1).sh' storage-fault-lab.sh
-chmod +x storage-fault-lab.sh
-./storage-fault-lab.sh selftest
+
+chmod +x storage-fault-lab.sh ./storage-fault-lab.sh selftest
 sudo ./storage-fault-lab.sh doctor
-sudo ./storage-fault-lab.sh init
-./storage-fault-lab.sh catalog
+sudo ./storage-fault-lab.sh init ./storage-fault-lab.sh catalog
 ```
 
 `init` creates a 1 GiB ext4 image, attaches it as a loop device, and mounts it at `/mnt/storage-fault-lab-v2`. It also creates a random namespace for the lab's LVM, RAID, and device-mapper resource names to reduce collisions with existing host resources.

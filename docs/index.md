@@ -13,24 +13,24 @@ Personal infrastructure documentation.
 ## Template
 
 ### Ansible
-[] Linux Hardening
-[] Docker installation
-[] Prometheus installation & Configoration
-[] Grafana installation & Configoration
-[] Mysql installation  & Configoration
-[] Postgresql installation & Configoration
-[] Redis installation & Configoration
-[] OpenVpn installation & Configoration
-[] Create or revoke openvpn connection
+- [] Linux Hardening
+- [] Docker installation
+- [] Prometheus installation & Configoration
+- [] Grafana installation & Configoration
+- [] Mysql installation  & Configoration
+- [] Postgresql installation & Configoration
+- [] Redis installation & Configoration
+- [] OpenVpn installation & Configoration
+- [] Create or revoke openvpn connection
 
 ### Docker
-[] Docker for Java Project
-[] Docker for Golang Project
-[] Docker for Python Project
-[] Docker for Laravel Project
-[] Docker for Nodejs Project
-[] Docker for ReactJs Project
-[] Docker for NextJS Project
-[] Docker for .net Project
+- [] Docker for Java Project
+- [] Docker for Golang Project
+- [] Docker for Python Project
+- [] Docker for Laravel Project
+- [] Docker for Nodejs Project
+- [] Docker for ReactJs Project
+- [] Docker for NextJS Project
+- [] Docker for .net Project
 
 
