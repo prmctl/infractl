@@ -90,17 +90,60 @@ PY
 ```
 
 ### Filesystem Read-only
+A filesystem may become read-only because of a filesystem error or a failure in the storage path. For example, the filesystem driver may detect inconsistent metadata or a journal error and stop further writes. With ext4, the `errors=remount-ro` mount option tells the filesystem to remount as read-only after certain errors.
 
-A filesystem may become read-only after storage I/O failures, filesystem metadata corruption, or journal errors. For example, ext4 configured with errors=remount-ro may switch to read-only to limit further damage. Disk-space or inode exhaustion alone does not cause this transition.
-Reading may remain possible, but writes, deletions, and renames fail with Read-only file system. Data already stored may survive; recent or failed writes are not guaranteed to be preserved.
-Check mount options using findmnt -T /affected/path and inspect kernel logs with journalctl -k. Look for I/O errors, filesystem errors, journal aborts, and remount messages.
-Recovery steps:
-1. Identify and resolve the underlying storage or configuration problem.
-2. Preserve important data before repairs; avoid repairing storage that is still failing.
-3. Stop dependent services and unmount the affected filesystem.
-4. If needed, check and repair it using the appropriate tool—for ext4, e2fsck -f /dev/DEVICE. Never run repairs on a mounted filesystem.
-5. Mount it read-write, verify writes and kernel logs, then restore services and check application consistency.
-A root filesystem may require a rescue environment. Filesystem repair restores structural consistency; it does not guarantee complete data recovery or database integrity. If read-only mode was intentional and no corruption exists, correcting the configuration and remounting read-write may be sufficient.
+A filesystem error can follow an unexpected shutdown, a kernel or filesystem bug, or an unsafe administrative operation. A storage failure can come from the disk or any part of the storage path, such as a controller, RAID, virtual disk, or network storage. A storage I/O error may trigger a filesystem error and cause a read-only remount.
+
+A read-only mount can also be intentional. If the filesystem was deliberately mounted read-only, or a configuration enforces that state, correcting the configuration may be enough. Disk-space or inode exhaustion alone normally causes write failures such as `No space left on device`; it does not, by itself, make the filesystem read-only.
+
+Reading may remain possible, while writes, deletions, and renames fail with `Read-only file system`. Data already stored may still be readable, but recent or failed writes are not guaranteed to be preserved.
+
+#### Diagnose
+
+Check the mount state and options:
+
+```bash
+findmnt -T /affected/path -o TARGET,SOURCE,FSTYPE,OPTIONS
+```
+
+Inspect kernel messages from the current boot:
+
+```bash
+journalctl -k -b
+```
+
+Search current-boot messages for common filesystem and storage errors:
+
+```bash
+journalctl -k -b | grep -Ei 'error|fail|I/O|ext4|xfs|btrfs|nvme|scsi|remount|journal'
+```
+
+If the server has rebooted since the incident, inspect the previous boot as well. Previous-boot logs are available only if they were retained by the system journal:
+
+```bash
+journalctl -k -b -1
+journalctl -k -b -1 | grep -Ei 'error|fail|I/O|ext4|xfs|btrfs|nvme|scsi|remount|journal'
+```
+
+Look for filesystem errors, journal aborts, I/O errors, device resets, and messages indicating a read-only remount. These messages can help distinguish a filesystem-level error from a failure in the storage path.
+
+#### Recovery
+
+1. Identify and resolve the underlying filesystem, storage, or configuration problem. Do not treat a remount to read-write as a fix if the cause is still present.
+2. Preserve important data before attempting repairs. If the storage device or path is still failing, avoid in-place repairs until the storage is stable; consider recovering from a copy or image.
+3. Stop services that use the filesystem, then unmount it before running a filesystem repair tool.
+4. If a filesystem check is needed, use the tool appropriate for that filesystem. For ext4, for example:
+
+   ```bash
+   e2fsck -f /dev/DEVICE
+   ```
+
+   Replace `/dev/DEVICE` with the correct, unmounted filesystem device. Never run `e2fsck` on a mounted filesystem.
+5. After resolving the cause and completing any needed repair, mount the filesystem read-write. Verify that writes work and check the kernel logs for new errors before restoring dependent services.
+6. Check application-level consistency as well. Filesystem repair restores filesystem structure; it does not guarantee complete data recovery or database integrity.
+
+A root filesystem may require a rescue or recovery environment to unmount and repair it. If read-only mode was intentional and there is no filesystem or storage error, correcting the configuration and remounting read-write may be sufficient.
+
 
 Incident
 ```sh
