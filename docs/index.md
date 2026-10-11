@@ -6,4 +6,31 @@ Personal infrastructure documentation.
 - [Laboratories](laboratories/index.md)
 - [Templates](templates/index.md)
 
-Add Markdown files under any section. Nested folders appear automatically in the navigation.
+
+
+# TODO
+
+## Template
+
+### Ansible
+[] Linux Hardening
+[] Docker installation
+[] Prometheus installation & Configoration
+[] Grafana installation & Configoration
+[] Mysql installation  & Configoration
+[] Postgresql installation & Configoration
+[] Redis installation & Configoration
+[] OpenVpn installation & Configoration
+[] Create or revoke openvpn connection
+
+### Docker
+[] Docker for Java Project
+[] Docker for Golang Project
+[] Docker for Python Project
+[] Docker for Laravel Project
+[] Docker for Nodejs Project
+[] Docker for ReactJs Project
+[] Docker for NextJS Project
+[] Docker for .net Project
+
+
