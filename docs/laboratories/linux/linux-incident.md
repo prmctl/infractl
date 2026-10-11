@@ -13,8 +13,6 @@ sudo apt install -y fio stress-ng lvm2 mdadm dmsetup e2fsprogs sysstat smartmont
 
 # Incidents
 
-
-
 ## Disk And File System
 
 ### Prepare
@@ -43,20 +41,21 @@ Deletion usually works. Moving files within the same filesystem does not free sp
 Check service errors using journalctl -u <service> and configured application logs, often under /var/log/. Logs on the full filesystem may be missing.
 Recover by safely removing or relocating unnecessary data, verifying free space, and checking service health. Failed services may need restarting; failed writes are not automatically recovered.
 
-Incident
+#### incident generator
 ```sh
 mountpoint /mnt/fs-lab && chaosd attack disk fill --path /mnt/fs-lab/fill-rest.bin --fallocate=false --size 600M
 ```
 
-
+---
 ### Inode Exhaustion
 When a filesystem runs out of free inodes, creating new files, directories, or symlinks fails with ENOSPC (No space left on device), even when disk space remains available. Existing files generally remain readable and writable if sufficient data space is available.
 This can disrupt uploads, temporary files, sessions, log rotation, database operations, and service startup. Check inode usage with df -i and compare it with disk usage using df -h.
 Check journalctl -u <service> and configured application logs for failed file creation. The error message alone does not distinguish inode exhaustion from disk-space exhaustion.
 Stop excessive file creation and safely delete unnecessary files. Deleted files still held open retain their inodes until closed; check with lsof +L1. Verify free inodes and service health after cleanup.
 For directories containing millions of files, use find or unsorted ls -1U for inspection and controlled cleanup. Prevent recurrence through retention policies and inode monitoring; splitting files across directories improves manageability but does not reduce total inode usage.
-Incident
 
+
+#### incident generator
 ```sh
 mkdir -p /mnt/inode-lab
 test ! -e /var/tmp/inode-lab-3m.img &&
@@ -88,7 +87,7 @@ else:
     print("Limit reached without an error.")
 PY
 ```
-
+---
 ### Filesystem Read-only
 A filesystem may become read-only because of a filesystem error or a failure in the storage path. For example, the filesystem driver may detect inconsistent metadata or a journal error and stop further writes. With ext4, the `errors=remount-ro` mount option tells the filesystem to remount as read-only after certain errors.
 
@@ -145,7 +144,7 @@ Look for filesystem errors, journal aborts, I/O errors, device resets, and messa
 A root filesystem may require a rescue or recovery environment to unmount and repair it. If read-only mode was intentional and there is no filesystem or storage error, correcting the configuration and remounting read-write may be sufficient.
 
 
-Incident
+#### incident generator
 ```sh
 df -h /var/tmp
 test ! -e /var/tmp/io-fault-lab.img &&
