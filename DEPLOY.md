@@ -1,10 +1,14 @@
 # Deployment
 
-1. Extract the ZIP and copy **all contents**, including `.github`, to the repository root (not a nested folder).
-2. Remove old files in `.github/workflows/` from the repository; only `pages.yml` should remain.
-3. Commit and push to `master`.
-4. In GitHub **Settings → Pages**, select **GitHub Actions** as Source.
-5. Check the **Actions** tab. Both `build` and `deploy` must pass.
-6. Visit https://prmctl.github.io/infractl/.
+This repository uses MkDocs Material and GitHub Actions.
 
-The build uses `python -m mkdocs build --clean` and uploads `site/`. It never invokes `build.py`.
+1. Place all files in the repository root, including `.github/workflows/pages.yml`.
+2. Push to `master` (or `main`).
+3. In GitHub, set Settings > Pages > Build and deployment > Source to GitHub Actions.
+4. Confirm the `Deploy documentation` workflow has successful build and deploy jobs.
+
+Site URL: https://prmctl.github.io/infractl/
+
+For a custom domain, configure it in GitHub Pages Settings and update `site_url` in `mkdocs.yml`. DNS and custom domain configuration are separate from the build.
+
+To install from this archive: extract it beside your local repository, `cd` into your repository, and run `bash ../install-infractl.sh` (adjust the relative path if necessary).
