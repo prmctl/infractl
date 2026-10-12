@@ -18,10 +18,13 @@ Personal infrastructure documentation.
 - [] Prometheus installation & Configoration
 - [] Grafana installation & Configoration
 - [] Mysql installation  & Configoration
+- [] Mysql backup checker
 - [] Postgresql installation & Configoration
+- [] Postgresql backup checker
 - [] Redis installation & Configoration
 - [] OpenVpn installation & Configoration
 - [] Create or revoke openvpn connection
+
 
 ### Docker
 - [] Docker for Java Project
