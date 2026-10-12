@@ -171,3 +171,118 @@ sync -f /mnt/io-fault-lab
 findmnt -T /mnt/io-fault-lab -o TARGET,SOURCE,OPTIONS
 journalctl -k --since "5 minutes ago" --no-pager | tail -n 60
 ```
+
+
+
+## Deleted Files Still Held Open
+Deleting a file removes its directory entry, but its disk space remains allocated while a process holds it open. This commonly occurs when an active service log is deleted. du no longer counts the file, while df still reports its allocated space.
+Use lsof +L1 to identify deleted files still open, including the owning PID and file descriptor. Recover space through the application's supported log-reopening procedure or a controlled service restart. Space is released when the last open reference is closed; deleting the pathname again or running sync does not help.
+Verify recovery with df -h and lsof +L1. Prevent recurrence through correctly configured log rotation and service-specific log reopening.
+
+
+```sh
+findmnt -T /mnt/fs-lab -o TARGET,SOURCE,OPTIONS
+df -h /mnt/fs-lab
+```
+
+```sh
+mountpoint /mnt/fs-lab && python3 - <<'PY'
+import os
+import time
+
+with open("/mnt/fs-lab/held-open.log", "wb") as f:
+    block = b"x" * (1024 * 1024)
+    for _ in range(100):
+        f.write(block)
+    f.flush()
+    os.fsync(f.fileno())
+
+    print(f"PID: {os.getpid()} — holding a 100 MiB file open", flush=True)
+    while True:
+        time.sleep(1)
+PY
+```
+
+```sh
+df -h /mnt/fs-lab
+du -xsh /mnt/fs-lab
+
+rm /mnt/fs-lab/held-open.log
+
+ls -lh /mnt/fs-lab
+df -h /mnt/fs-lab
+du -xsh /mnt/fs-lab
+
+lsof /mnt/lab/held-open.log
+lsof +L1
+systemctl status 1495
+```
+
+```sh
+ps -p 1495 -o pid,cmd
+kill -TERM 1495
+```
+
+
+## High Storage I/O Latency
+
+Storage I/O latency occurs when reads, writes, or flush operations take longer than expected. Symptoms include slow file operations, delayed database commits, application timeouts, and processes waiting for I/O.
+Common causes include workload exceeding storage capacity, shared-storage contention, IOPS or throughput limits, device errors and retries, and network-storage delays. High IOPS alone does not indicate a problem; latency can also increase under low load.
+Diagnostic commands:
+
+```sh
+iostat -xz -y 1                   # Device latency, queue depth, IOPS and throughput
+pidstat -d 1                      # Per-process I/O activity
+findmnt -T /data/path             # Identify the affected filesystem
+lsblk                             # Map storage devices and layers
+vmstat 1                          # Check I/O wait and swap activity
+journalctl -k --since "30 minutes ago"  # I/O errors, timeouts and resets
+```
+In iostat, inspect r_await and w_await (average completion time in milliseconds) and aqu-sz (average outstanding requests). Compare them with the normal baseline; %util alone does not prove saturation.
+Correlate application slowdown with device latency and workload changes. High latency with growing queues during heavy activity suggests saturation; high latency under light activity suggests storage degradation, throttling, or infrastructure issues.
+
+```sh
+modprobe dm-delay
+df -h /var/tmp
+
+test ! -e /var/tmp/latency-lab.img &&
+fallocate -l 512M /var/tmp/latency-lab.img
+```
+```sh
+mkdir -p /mnt/latency-lab
+
+LAT_LOOP=$(losetup --find --show /var/tmp/latency-lab.img)
+LAT_SECTORS=$(blockdev --getsz "$LAT_LOOP")
+
+dmsetup create latency-lab --table "0 $LAT_SECTORS linear $LAT_LOOP 0"
+
+mkfs.ext4 -m 0 /dev/mapper/latency-lab
+mount /dev/mapper/latency-lab /mnt/latency-lab
+```
+
+test I/O Latency
+```sh
+python3 - <<'PY'
+import os
+import time
+
+with open("/mnt/latency-lab/probe.bin", "wb", buffering=0) as f:
+    start = time.monotonic()
+    for _ in range(20):
+        f.write(b"x" * 4096)
+        os.fsync(f.fileno())
+    elapsed = time.monotonic() - start
+
+print(f"Total: {elapsed:.3f}s; average write+fsync: {elapsed / 20:.3f}s")
+PY
+```
+
+generate incident
+
+```sh
+dmsetup suspend latency-lab
+
+dmsetup reload latency-lab --table "0 $LAT_SECTORS delay $LAT_LOOP 0 200"
+
+dmsetup resume latency-lab
+```
