@@ -118,7 +118,6 @@ journalctl -k -b -1 | grep -Ei 'error|fail|I/O|ext4|xfs|btrfs|nvme|scsi|remount|
 Look for filesystem errors, journal aborts, I/O errors, device resets, and messages indicating a read-only remount. These messages can help distinguish a filesystem-level error from a failure in the storage path.
 
 ### Recovery
-
 1. Identify and resolve the underlying filesystem, storage, or configuration problem. Do not treat a remount to read-write as a fix if the cause is still present.
 2. Preserve important data before attempting repairs. If the storage device or path is still failing, avoid in-place repairs until the storage is stable; consider recovering from a copy or image.
 3. Stop services that use the filesystem, then unmount it before running a filesystem repair tool.
@@ -173,7 +172,7 @@ journalctl -k --since "5 minutes ago" --no-pager | tail -n 60
 ```
 
 
-
+---
 ## Deleted Files Still Held Open
 Deleting a file removes its directory entry, but its disk space remains allocated while a process holds it open. This commonly occurs when an active service log is deleted. du no longer counts the file, while df still reports its allocated space.
 Use lsof +L1 to identify deleted files still open, including the owning PID and file descriptor. Recover space through the application's supported log-reopening procedure or a controlled service restart. Space is released when the last open reference is closed; deleting the pathname again or running sync does not help.
@@ -223,7 +222,7 @@ ps -p 1495 -o pid,cmd
 kill -TERM 1495
 ```
 
-
+---
 ## High Storage I/O Latency
 
 Storage I/O latency occurs when reads, writes, or flush operations take longer than expected. Symptoms include slow file operations, delayed database commits, application timeouts, and processes waiting for I/O.
@@ -281,8 +280,6 @@ generate incident
 
 ```sh
 dmsetup suspend latency-lab
-
 dmsetup reload latency-lab --table "0 $LAT_SECTORS delay $LAT_LOOP 0 200"
-
 dmsetup resume latency-lab
 ```
