@@ -1,5 +1,12 @@
 
 
+show the PID 
+```sh
+pgrep nginx
+```
+
+
+
 show the process that R/W on a file
 ```sh
 lsof /path
