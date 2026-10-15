@@ -1,18 +1,24 @@
 
 # Airflow Architecture
+<div style="height: 10px;"></div>
 
-<br>
 
+
+---
 # Installation
+<div style="height: 10px;"></div>
 
-<br>
+
+
+
+
+
+
+
 
 ## Docker
-
-<br>
-
 ```sh
-mkdir -p dags logs plugins config
+mkdir airflow-project && cd airflow-project && mkdir -p dags logs plugins config
 ```
 ```sh
 curl -LfO https://airflow.apache.org/docs/apache-airflow/3.1.0/docker-compose.yaml
