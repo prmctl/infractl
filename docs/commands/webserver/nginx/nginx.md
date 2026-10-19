@@ -2,14 +2,103 @@
 # Config
 
 
+## Configuration Architecture
+
+```text
+/etc/nginx/
+│
+├── nginx.conf
+│
+├── conf.d/
+│   ├── 00-global.conf
+│   ├── 10-security.conf
+│   ├── 20-gzip.conf
+│   ├── 30-rate-limit.conf
+│   └── 40-log-format.conf
+│
+├── sites-available/
+│   ├── example.com.conf
+│   ├── api.example.com.conf
+│   └── admin.example.com.conf
+│
+├── sites-enabled/
+│   ├── example.com.conf -> ../sites-available/example.com.conf
+│   └── api.example.com.conf -> ../sites-available/api.example.com.conf
+│
+├── snippets/
+│   ├── ssl.conf
+│   ├── security-headers.conf
+│   ├── proxy-params.conf
+│   ├── cors.conf
+│   ├── cache-static.conf
+│   └── error-pages.conf
+│
+├── upstreams/
+│   ├── api.conf
+│   ├── backend.conf
+│   └── websocket.conf
+│
+├── maps/
+│   ├── connection-upgrade.conf
+│   └── blocked-user-agents.conf
+│
+├── ssl/
+│   ├── example.com/
+│   │   ├── fullchain.pem
+│   │   └── privkey.pem
+│   └── dhparam.pem
+│
+└── modules-enabled/
+```
+### nginx.conf
+main config file
+
+### conf.d
+for http level configs
+
+### upstreams
+
+### Snippets
+for reuseable configs
+
+### Sites Available
+config for each domain or domain
+for activation
+```sh
+sudo ln -s /etc/nginx/sites-available/api.example.com.conf /etc/nginx/sites-enabled/
+```
+
+### upstreams
+for define backend services
+
+### maps
+for manage websocket
+
+### SSL
+
+```sh
+#ssl.conf
+ssl_protocols TLSv1.2 TLSv1.3;
+ssl_session_cache shared:SSL:10m;
+ssl_session_timeout 1d;
+ssl_session_tickets off;
+```
+
+```sh
+#security-headers.conf
+add_header X-Content-Type-Options "nosniff" always;
+add_header Referrer-Policy
+    "strict-origin-when-cross-origin" always;
+add_header X-Frame-Options
+    "SAMEORIGIN" always;
+```
+
 ## Configoration
 
-
 ### Rate Limiting && Connection Limiting
-
 rate limit config file
 ```sh
-/etc/nginx/conf.d/rate-limits.conf
+#/etc/nginx/conf.d/rate-limits.conf
 
 # General API Rate Limit
 limit_req_zone $binary_remote_addr
@@ -127,7 +216,7 @@ sudo fail2ban-regex /var/log/nginx/access.log /etc/fail2ban/filter.d/nginx-ratel
 sudo fail2ban-client status
 sudo fail2ban-client status nginx-ratelimit
 ```
-show band IPS
+show baned IPS
 ```sh
 sudo fail2ban-client get nginx-ratelimit banip
 ```
