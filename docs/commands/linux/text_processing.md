@@ -1,11 +1,5 @@
 
-
-
-
 # awk
-
-
-
 ```sh
 awk '{print $2,$4}' employees.txt 
 awk '$3=="Engineering" {print $2,$4}'  employees.txt 
@@ -18,7 +12,6 @@ awk '$4 > 75000 {print $2, $4}' /root/awklab/employees.txt > /root/awklab/high-s
 
 ```sh
 cut -d' ' -f1 access.log | sort | uniq -c | sort -rn > ip-report.txt
-
 cut -d',' -f2,3 /root/log 
 
 
@@ -39,7 +32,6 @@ r
 ```sh
 grep -E "ERROR|WARN" server.log > warnings-errors.txt 
 ```
-
 
 
 # Json
