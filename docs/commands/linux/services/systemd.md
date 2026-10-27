@@ -10,3 +10,9 @@ systemctl list-units --type=service --all
 systemctl status nginx
 journalctl -u nginx -n 100 --no-pager
 ```
+
+
+
+```sh
+sudo systemctl list-units --all --type=service 'openvpn*'
+```
