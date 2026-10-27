@@ -42,3 +42,10 @@ Personal infrastructure documentation.
 - [] Brute Force
 - [] 
 
+
+### Network
+[] Overlay networks using VXLAN and EVPN.
+[] Micro-segmentation and Zero Trust network architectures.
+[] Routing & Switching, VXLAN, EVPN, BGP, OSPF, and FEX. 
+[] Vlanning and network Segmentaion
+[] Spine-Leaf Architecture
