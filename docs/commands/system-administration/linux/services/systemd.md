@@ -4,6 +4,7 @@ show all services
 ```sh
 systemctl list-units --type=service --state=running
 systemctl list-units --type=service --all
+systemctl is-active postgresql
 ```
 
 ```bash

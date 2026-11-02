@@ -1,6 +1,6 @@
 #####################Create New Client#####################
 cd /etc/openvpn/server/easy-rsa
-./easyrsa gen-req new-client-name nopass
+sudo ./easyrsa gen-req new-client-name nopass
 
 
 ls -l pki/private/new-client-name.key
