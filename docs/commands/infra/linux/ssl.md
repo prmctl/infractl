@@ -22,7 +22,6 @@ sudo certbot certonly --manual --preferred-challenges dns -d example.com -d '*.e
 sudo certbot certonly --manual --preferred-challenges dns -d example.com
 ```
 
-
 ```sh
 sudo certbot renew --cert-name example.com --manual --preferred-challenges dns
 ```

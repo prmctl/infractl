@@ -1,5 +1,14 @@
 
+# general
+
+```sh
+curl api.ipmyp.ir
+curl 'https://api.ipify.org?format=json'
+```
+
+
 # iproute2
+
 
 ## ip      
 IP, Interface, Routing, ARP
@@ -95,6 +104,8 @@ Linux Network Statistics
 
 
 ---
+
+
 # dnsutils
 ## dig
 ## nslookup
