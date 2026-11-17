@@ -46,27 +46,11 @@ sudo lvs
 
 
 
-# LVM Disk Partitioning Runbook
+### LVM Disk Partitioning Runbook
 
-## Overview
 
-This runbook describes how to create, format, mount, and persist a new Logical Volume (LV) on an Ubuntu Linux server using LVM (Logical Volume Manager).
 
-**Environment:**
-- OS: Ubuntu Linux
-- Physical Volume (PV): `/dev/sda3`
-- Volume Group (VG): `ubuntu-vg`
-- Existing Logical Volume: `ubuntu-lv`
-- New Logical Volume: `data-lv`
-- New LV Size: `20G`
-- Filesystem: `ext4`
-- Mount Point: `/data`
-
-**Important:** This procedure creates a new, empty Logical Volume. It does not cover migrating existing directories such as `/var`, resizing existing filesystems, or replacing the current swap file.
-
----
-
-## 1. Check Disk and LVM Status
+### 1. Check Disk and LVM Status
 
 Identify available disks, partitions, filesystems, and existing LVM configurations.
 
@@ -99,13 +83,13 @@ sudo lvs ubuntu-vg/data-lv
 
 Proceed only if `data-lv` does not exist and at least 20GiB of free space is available.
 
-## 2. Create PV and VG (If Needed)
+### 2. Create PV and VG (If Needed)
 
 **Skip this step if the PV and VG already exist.**
 
 Creating a new PV or changing disk partitions can destroy existing data if the wrong device is selected.
 
-### 2.1 Create a Physical Volume
+#### 2.1 Create a Physical Volume
 
 For a verified, unused target partition:
 
@@ -115,13 +99,13 @@ sudo pvcreate /dev/sdX1
 
 Replace `/dev/sdX1` with the actual target partition.
 
-### 2.2 Create a Volume Group
+#### 2.2 Create a Volume Group
 
 ```bash
 sudo vgcreate my-vg /dev/sdX1
 ```
 
-### 2.3 Extend an Existing Volume Group (Optional)
+#### 2.3 Extend an Existing Volume Group (Optional)
 
 If adding a new PV to an existing VG:
 
@@ -129,7 +113,7 @@ If adding a new PV to an existing VG:
 sudo vgextend ubuntu-vg /dev/sdX1
 ```
 
-### 2.4 Verify
+#### 2.4 Verify
 
 ```bash
 sudo pvs
@@ -142,7 +126,7 @@ For this server, `/dev/sda3` is already a PV belonging to `ubuntu-vg`. No PV or 
 
 ---
 
-## 3. Create a Logical Volume
+### 3. Create a Logical Volume
 
 Create a new 20GiB Logical Volume named `data-lv`.
 
@@ -170,7 +154,7 @@ Expected result: `data-lv` exists with a size of 20GiB.
 
 ---
 
-## 4. Create a Filesystem
+### 4. Create a Filesystem
 
 Format the new Logical Volume with the ext4 filesystem.
 
@@ -200,7 +184,7 @@ TYPE="ext4"
 
 ---
 
-## 5. Create a Mount Point
+### 5. Create a Mount Point
 
 Create the directory where the filesystem will be mounted.
 
@@ -224,7 +208,7 @@ Do not mount over a directory containing existing data without planning its migr
 
 ---
 
-## 6. Mount the Filesystem
+### 6. Mount the Filesystem
 
 Mount the new Logical Volume:
 
@@ -250,11 +234,11 @@ The filesystem should be mounted at `/data` and accessible.
 
 ---
 
-## 7. Make the Mount Persistent
+### 7. Make the Mount Persistent
 
 By default, a manual mount does not necessarily survive a reboot. Configure `/etc/fstab` to mount the filesystem automatically.
 
-### 7.1 Get the Filesystem UUID
+#### 7.1 Get the Filesystem UUID
 
 ```bash
 sudo blkid /dev/ubuntu-vg/data-lv
@@ -267,13 +251,13 @@ UUID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 TYPE="ext4"
 ```
 
-### 7.2 Back Up /etc/fstab
+#### 7.2 Back Up /etc/fstab
 
 ```bash
 sudo cp -a /etc/fstab /etc/fstab.bak
 ```
 
-### 7.3 Edit /etc/fstab
+#### 7.3 Edit /etc/fstab
 
 ```bash
 sudo nano /etc/fstab
@@ -298,7 +282,7 @@ UUID=<ACTUAL_UUID>  /data  ext4  defaults  0  2
 
 Do not add a duplicate entry for the same mount point.
 
-### 7.4 Validate the Configuration
+#### 7.4 Validate the Configuration
 
 ```bash
 sudo findmnt --verify --verbose
@@ -328,7 +312,7 @@ df -hT /data
 
 ---
 
-## 8. Post-Configuration Validation
+### 8. Post-Configuration Validation
 
 Run the following commands:
 
@@ -341,25 +325,13 @@ df -hT /data
 findmnt --mountpoint /data
 ```
 
-**Validation checklist:**
-
-- [ ] The new LV exists.
-- [ ] The LV size is correct.
-- [ ] The filesystem type is ext4.
-- [ ] The filesystem is mounted at `/data`.
-- [ ] The `/etc/fstab` entry is valid.
-- [ ] The filesystem mounts successfully using `mount /data`.
-- [ ] The existing root and boot filesystems remain unchanged.
-
-An optional reboot can verify persistence, but should be performed only during an approved maintenance window with recovery access available.
-
 ---
 
-## 9. Rollback Procedure
+### 9. Rollback Procedure
 
 Use this procedure only if the new LV contains no data that needs to be retained.
 
-### 9.1 Remove the fstab Entry
+#### 9.1 Remove the fstab Entry
 
 Edit `/etc/fstab` and remove the entry created for `/data`.
 
@@ -374,7 +346,7 @@ sudo findmnt --verify --verbose
 sudo systemctl daemon-reload
 ```
 
-### 9.2 Unmount the Filesystem
+#### 9.2 Unmount the Filesystem
 
 ```bash
 sudo umount /data
@@ -388,7 +360,7 @@ findmnt --mountpoint /data
 
 If the filesystem is busy, identify the processes using it before proceeding.
 
-### 9.3 Remove the Logical Volume
+#### 9.3 Remove the Logical Volume
 
 **Destructive operation:** This permanently removes the LV and its filesystem.
 
@@ -398,7 +370,7 @@ Only execute after confirming the correct LV and that its data is no longer requ
 sudo lvremove /dev/ubuntu-vg/data-lv
 ```
 
-### 9.4 Verify Available Space
+#### 9.4 Verify Available Space
 
 ```bash
 sudo lvs
@@ -417,7 +389,7 @@ Do not remove the existing PV, VG, or root LV during this rollback.
 
 ---
 
-## 10. LVM Command Reference
+### 10. LVM Command Reference
 
 | Command | Purpose |
 |---|---|
@@ -441,7 +413,7 @@ Do not remove the existing PV, VG, or root LV during this rollback.
 
 ---
 
-## LVM Workflow Summary
+### LVM Workflow Summary
 
 ```text
 Physical Disk
